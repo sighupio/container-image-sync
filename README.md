@@ -1,7 +1,11 @@
 <!-- markdownlint-disable MD033 -->
 <h1>
-    <img src="https://github.com/sighupio/fury-distribution/blob/main/docs/assets/fury-epta-white.png?raw=true" align="left" width="90" style="margin-right: 15px"/>
-    Kubernetes Fury Distribution <br/> Container Image Sync
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sighupio/distribution/refs/heads/main/docs/assets/white-logo.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sighupio/distribution/refs/heads/main/docs/assets/black-logo.png">
+  <img alt="Shows a black logo in light color mode and a white one in dark color mode." src="https://raw.githubusercontent.com/sighupio/distribution/refs/heads/main/docs/assets/white-logo.png">
+</picture><br/>
+  SIGHUP Distribution <br/> Container Image Sync
 </h1>
 <!-- markdownlint-enable MD033 -->
 
@@ -16,9 +20,9 @@
 This is a simple mechanism that pulls and pushes or builds container images based on a configuration file (`yaml`).
 
 The main goal for this repository is to have a central location used to sync on our public SIGHUP registry all the
-upstream images used by all the Fury modules.
+upstream images used by all the SKD modules.
 
-The goal of this repository is twofold: build custom images and sync upstream ones used by all the Fury modules on
+The goal of this repository is twofold: build custom images and sync upstream ones used by all the SKD modules on
 our public SIGHUP registry.
 
 Features:
@@ -31,7 +35,7 @@ Features:
 
 ## <a name="how-it-works">How it works</a>
 
-Inside the folder `modules/` there is a subfolder for each KFD module with an `images.yml` file.
+Inside the folder `modules/` there is a subfolder for each SKD module with an `images.yml` file.
 
 Each `images.yml` file has to have a root attribute: `images` and its value is an array of objects:
 
@@ -90,9 +94,9 @@ This automation runs once a day: `"0 2 * * *"` and every time someone pushes to 
 
 ## <a name="vulns-detect-and-patch">Vulnerability detection and patching</a>
 
-The reports of vulnerability scanning and patching are available in the dedicate [worflow run](https://github.com/sighupio/fury-distribution-container-image-sync/actions/workflows/cve-scan-and-patching.yml) page.
+The reports of vulnerability scanning and patching are available in the dedicate [worflow run](https://github.com/sighupio/container-image-sync/actions/workflows/cve-scan-and-patching.yml) page.
 
 On each `workflow run`, navigate to the **Artefacts** section where you can find:
 
-- the `cve-reports-vX.Y.Z` artefact (zip file) that includes the pre patching and post patching vulnerabilities reports for KFD version `X.Y.Z`.
-- the `cve-patch-reports-by-image` artefact (zip file) that includes the patching report by image for all the images used in all the supported KFD versions.
+- the `cve-reports-vX.Y.Z` artefact (zip file) that includes the pre patching and post patching vulnerabilities reports for SKD version `X.Y.Z`.
+- the `cve-patch-reports-by-image` artefact (zip file) that includes the patching report by image for all the images used in all the supported SKD versions.
