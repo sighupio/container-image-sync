@@ -1,11 +1,11 @@
 <!-- markdownlint-disable MD033 -->
-<h1>
+<h1 align="center">
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sighupio/distribution/refs/heads/main/docs/assets/white-logo.png">
   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sighupio/distribution/refs/heads/main/docs/assets/black-logo.png">
   <img alt="Shows a black logo in light color mode and a white one in dark color mode." src="https://raw.githubusercontent.com/sighupio/distribution/refs/heads/main/docs/assets/white-logo.png">
 </picture><br/>
-  SIGHUP Distribution <br/> Container Image Sync
+  Container Image Sync
 </h1>
 <!-- markdownlint-enable MD033 -->
 
