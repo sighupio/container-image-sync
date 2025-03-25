@@ -1,0 +1,199 @@
+name: 'skopeo sync container images'
+description: 'sync docker image to another registry'
+inputs:
+  source:
+    description: "image source repository"
+    required: true
+  tag:
+    description: "image tag to sync"
+    required: true
+  destination:
+    description: "image destination repository"
+    required: true
+  multi-arch:
+    description: "want to sync multiple archictecture"
+    required: true
+    default: true
+  registry_auth_file:
+    description: "skopeo REGISTRY_AUTH_FILE env var value"
+    required: true
+    default: '/tmp/auth.json'
+  dry_run:
+    description: "dry run mode enabled"
+    required: false
+    default: 'true'
+runs:
+  using: 'composite'
+  steps:
+    - name: check if multi arch ${{ inputs.source }}:${{ inputs.tag }} is in sync with ${{ inputs.destination }}
+      if: inputs.multi-arch
+      id: multi_arch_need_sync
+      shell: bash
+      env:
+        REGISTRY_AUTH_FILE: ${{ inputs.registry_auth_file }}
+      run: |
+        #!/bin/bash
+        curl -sL https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64 -o /usr/local/bin/jq
+        chmod +x /usr/local/bin/jq
+
+        set +e
+        # Fetch source and target image details
+        source_manifest=$(skopeo inspect --raw docker://${{ inputs.source }}:${{ inputs.tag }} 2>&1)
+        if [[ $? -ne 0 ]]; then
+            echo "Error can't get info about ${{ inputs.source }}:${{ inputs.tag }}. Exit!"
+            exit 255
+        fi
+
+        target_manifest=$(skopeo inspect --raw docker://${{ inputs.destination }}:${{ inputs.tag }} 2> /dev/null)
+        if [[ $? -ne 0 ]]; then
+            echo "Error can't get info about ${{ inputs.destination }}:${{ inputs.tag }}."
+        fi
+        set -e
+
+        NEED_SYNC=false
+        source_digest=
+        target_digest=
+        source_schema_version=$(echo "$source_manifest" | jq -r '.schemaVersion')
+        target_schema_version=$(echo "$target_manifest" | jq -r '.schemaVersion')
+        if [ "${source_schema_version}" = "1" ] && [ "${target_schema_version}" = "1" ]
+        then
+          source_digest=$(echo "$source_manifest" | jq -c '.fsLayers')
+          target_digest=$(echo "$target_manifest" | jq -c '.fsLayers' 2> /dev/null)
+        elif [ "${source_schema_version}" = "2" ] && [ "${target_schema_version}" = "2" ]
+        then 
+          source_media_type=$(echo "$source_manifest" | jq -r '.mediaType')
+          target_media_type=$(echo "$target_manifest" | jq -r '.mediaType')
+            
+          if [ "${source_media_type}" != "${target_media_type}" ]
+          then
+            echo "WARN[${{ inputs.source }}:${{ inputs.tag }}]: source and target manifest type diverge. Sync is required"
+            NEED_SYNC=true
+          else
+            case "$source_media_type" in
+              "application/vnd.docker.distribution.manifest.list.v2+json")
+                source_digest=$(echo "$source_manifest" | jq -c '[.manifests[].digest]')
+                target_digest=$(echo "$target_manifest" | jq -c '[.manifests[].digest]' 2> /dev/null)
+                ;;
+              "application/vnd.oci.image.index.v1+json")
+                source_digest=$(echo "$source_manifest" | jq -c '[.manifests[].digest]')
+                target_digest=$(echo "$target_manifest" | jq -c '[.manifests[].digest]' 2> /dev/null)
+                ;;
+              "application/vnd.docker.distribution.manifest.v2+json")
+                source_digest=$(echo "$source_manifest" | jq -c '[.layers[].digest]')
+                target_digest=$(echo "$target_manifest" | jq -c '[.layers[].digest]' 2> /dev/null)
+                ;;
+              "null")
+                source_digest=$(echo "$source_manifest" | jq -c '[.manifests[].digest]')
+                target_digest=$(echo "$target_manifest" | jq -c '[.manifests[].digest]' 2> /dev/null)
+                ;;
+              *)
+                echo "Invalid media type: $source_media_type"
+                exit 2
+              ;;
+            esac
+          fi
+        else
+          echo "Invalid schema version -> source=$source_schema_version target=$target_schema_version"
+          NEED_SYNC=true
+        fi
+      
+        if [[ $NEED_SYNC = "false" ]]
+        then
+          match=$(jq -n \
+            --argjson source_digest "${source_digest}" \
+            --argjson target_digest "${target_digest}" \
+            '($target_digest == $source_digest)')
+        
+          if [[ "$match" == true ]]; then
+            NEED_SYNC=false
+            echo "SUCCESS[${{ inputs.destination }}:${{ inputs.tag }}] in sync with ${{ inputs.source }}:${{ inputs.tag }}. No other actions are required."
+          else
+            echo "WARN[${{ inputs.destination }}:${{ inputs.tag }}] not in sync with ${{ inputs.source }}:${{ inputs.tag }}"
+            diffs=$(jq -n \
+              --argjson source "${source_digest}" \
+              --argjson target "${target_digest}" \
+              '($source | to_entries) - ($target | to_entries)')
+            echo "diffs are: $diffs"
+          fi
+        fi
+        
+        # Output the result
+        echo "NEED_SYNC=${NEED_SYNC}" >> $GITHUB_OUTPUT
+    - name: check if ${{ inputs.source }}:${{ inputs.tag }} is in sync with ${{ inputs.destination }}
+      if: inputs.multi-arch == false
+      id: need_sync
+      shell: bash
+      env:
+        REGISTRY_AUTH_FILE: ${{ inputs.registry_auth_file }}
+      run: |
+        #!/bin/bash
+        curl -sL https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64 -o /usr/local/bin/jq
+        chmod +x /usr/local/bin/jq
+
+        set +e
+        # Fetch source and target image details
+        source_manifest=$(skopeo inspect \
+          --override-os linux \
+          --override-arch amd64 \
+          docker://${{ inputs.source }}:${{ inputs.tag }} 2>&1)
+        if [[ $? -ne 0 ]]; then
+            echo "Error can't get info about ${{ inputs.source }}:${{ inputs.tag }}. Exit!"
+            exit 255
+        fi
+
+        target_manifest=$(skopeo inspect \
+          --override-os linux \
+          --override-arch amd64 \
+          docker://${{ inputs.destination }}:${{ inputs.tag }} 2> /dev/null)
+        if [[ $? -ne 0 ]]; then
+            echo "Error can't get info about ${{ inputs.destination }}:${{ inputs.tag }}."
+        fi
+        set -e
+
+        set -x
+        source_digest=$(echo "$source_manifest" | jq -c '.Layers')
+        target_digest=$(echo "$target_manifest" | jq -c '.Layers' 2> /dev/null)
+
+        NEED_SYNC=true
+        match=$(echo "${target_digest}" | jq \
+          --argjson source_digest "${source_digest}" \
+          '. == $source_digest')
+
+        if [[ "$match" == true ]]; then
+          NEED_SYNC=false
+          echo "${{ inputs.destination }}:${{ inputs.tag }} is in sync with ${{ inputs.source }}:${{ inputs.tag }}".
+          echo "No other actions are required."
+        else
+          echo "${{ inputs.destination }}:${{ inputs.tag }} is not in sync with ${{ inputs.source }}:${{ inputs.tag }}"
+        fi
+
+        # Output the result
+        echo "NEED_SYNC=${NEED_SYNC}" >> $GITHUB_OUTPUT
+    - name: sync multi arch ${{ inputs.source }}:${{ inputs.tag }} to ${{ inputs.destination }}
+      if: inputs.multi-arch && steps.multi_arch_need_sync.outputs.NEED_SYNC == 'true' && inputs.dry_run != 'true'
+      id: multi_arch_sync
+      shell: bash
+      env:
+        REGISTRY_AUTH_FILE: ${{ inputs.registry_auth_file }}
+      run: |
+        set -e
+        skopeo copy --preserve-digests --multi-arch all \
+          docker://${{ inputs.source }}:${{ inputs.tag }} \
+          docker://${{ inputs.destination }}:${{ inputs.tag }}
+    - name: sync ${{ inputs.source }}:${{ inputs.tag }} to ${{ inputs.destination }}
+      if: inputs.multi-arch == false && steps.need_sync.outputs.NEED_SYNC == 'true' && inputs.dry_run != 'true'
+      id: sync
+      shell: bash
+      env:
+        REGISTRY_AUTH_FILE: ${{ inputs.registry_auth_file }}
+      run: |
+        set -e
+        skopeo copy --preserve-digests \
+          docker://${{ inputs.source }}:${{ inputs.tag }} \
+          docker://${{ inputs.destination }}:${{ inputs.tag }}
+    - name: print warning executing in dry run
+      if: inputs.dry_run && (steps.multi_arch_need_sync.outputs.NEED_SYNC == 'true' ||steps.need_sync.outputs.NEED_SYNC == 'true')
+      shell: bash
+      run: |
+        echo "WARN[${{ inputs.source }}:${{ inputs.tag }}]: dry run is enabled and no sync will be executed"
+        exit 100

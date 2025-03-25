@@ -1,0 +1,16 @@
+name: 'Get available modules to sync'
+description: 'Analyze the repository "modules" directory and return a list as string'
+outputs:
+  modules:
+    value: ${{ steps.set_output.outputs.modules }}
+    description: 'JSON list of modules to sync'
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@master
+    - id: set_output
+      shell: bash
+      run: |
+        MODULES=$(find modules -mindepth 1 -maxdepth 1 -type d  | cut -d/ -f2 | xargs echo -n)
+        MODULES_JSON=\'[\"${MODULES//[$'\r\n']/\",\"}\"]\'
+        echo "modules=${MODULES}" >> $GITHUB_OUTPUT
