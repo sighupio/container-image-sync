@@ -20,9 +20,9 @@
 This is a simple mechanism that pulls and pushes or builds container images based on a configuration file (`yaml`).
 
 The main goal for this repository is to have a central location used to sync on our public SIGHUP registry all the
-upstream images used by all the SKD modules.
+upstream images used by all the SD modules.
 
-The goal of this repository is twofold: build custom images and sync upstream ones used by all the SKD modules on
+The goal of this repository is twofold: build custom images and sync upstream ones used by all the SD modules on
 our public SIGHUP registry.
 
 Features:
@@ -35,7 +35,7 @@ Features:
 
 ## <a name="how-it-works">How it works</a>
 
-Inside the folder `modules/` there is a subfolder for each SKD module with an `images.yml` file.
+Inside the folder `modules/` there is a subfolder for each SD module with an `images.yml` file.
 
 Each `images.yml` file has to have a root attribute: `images` and its value is an array of objects:
 
@@ -98,5 +98,5 @@ The reports of vulnerability scanning and patching are available in the dedicate
 
 On each `workflow run`, navigate to the **Artefacts** section where you can find:
 
-- the `cve-reports-vX.Y.Z` artefact (zip file) that includes the pre patching and post patching vulnerabilities reports for SKD version `X.Y.Z`.
-- the `cve-patch-reports-by-image` artefact (zip file) that includes the patching report by image for all the images used in all the supported SKD versions.
+- the `cve-reports-vX.Y.Z` artefact (zip file) that includes the pre patching and post patching vulnerabilities reports for SD version `X.Y.Z`.
+- the `cve-patch-reports-by-image` artefact (zip file) that includes the patching report by image for all the images used in all the supported SD versions.
