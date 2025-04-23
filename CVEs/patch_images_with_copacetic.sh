@@ -199,6 +199,7 @@ function patch_image() {
         # Ignore accepted errors
         if (
            [ "${copa_error}" == "no patchable vulnerabilities found" ] ||
+           [ "${copa_error}" == "no patchable packages found" ] ||
            [ "${copa_error}" == "no scanning results for os-pkgs found" ] ||
            [[ "${copa_error}" =~ "errors occurred:" ]] ||
            [[ "${copa_error}" =~ "unsupported osType" ]]
