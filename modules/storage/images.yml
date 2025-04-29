@@ -3,6 +3,7 @@ images:
     source: quay.io/ceph/ceph
     tag:
       - "v17.2.5"
+      - "v19.2.2"
     destinations:
       - registry.sighup.io/fury/ceph/ceph
 
@@ -10,6 +11,8 @@ images:
     source: quay.io/cephcsi/cephcsi
     tag:
       - "v3.7.2"
+      - "v3.12.3"
+      - "v3.14.0"
     destinations:
       - registry.sighup.io/fury/cephcsi/cephcsi
 
@@ -17,6 +20,8 @@ images:
     source: quay.io/csiaddons/k8s-sidecar
     tag:
       - "v0.5.0"
+      - "v0.9.1"
+      - "v0.12.0"
     destinations:
       - registry.sighup.io/fury/csiaddons/csiaddons
 
@@ -27,6 +32,8 @@ images:
       - "v4.1.0"
       - "v4.5.1"
       - "v4.6.0"
+      - "v4.6.1"
+      - "v4.8.0"
     destinations:
       - registry.sighup.io/fury/sig-storage/csi-attacher
       - registry.sighup.io/fury/netapp/csi-attacher
@@ -37,6 +44,8 @@ images:
       - "v2.5.1"
       - "v2.7.0"
       - "v2.10.0"
+      - "v2.11.1"
+      - "v2.13.0"
     destinations:
       - registry.sighup.io/fury/sig-storage/csi-node-driver-registrar
       - registry.sighup.io/fury/netapp/csi-node-driver-registrar
@@ -47,6 +56,8 @@ images:
       - "v3.3.0"
       - "v3.4.0"
       - "v4.0.1"
+      - "v5.0.1"
+      - "v5.1.0"
     destinations:
       - registry.sighup.io/fury/sig-storage/csi-provisioner
       - registry.sighup.io/fury/netapp/csi-provisioner
@@ -58,6 +69,8 @@ images:
       - "v1.7.0"
       - "v1.10.1"
       - "v1.11.0"
+      - "v1.11.1"
+      - "v1.13.1"
     destinations:
       - registry.sighup.io/fury/sig-storage/csi-resizer
       - registry.sighup.io/fury/netapp/csi-resizer
@@ -69,6 +82,8 @@ images:
       - "v6.1.0"
       - "v6.2.1"
       - "v7.0.2"
+      - "v8.0.1"
+      - "v8.2.0"
     destinations:
       - registry.sighup.io/fury/sig-storage/csi-snapshotter
       - registry.sighup.io/fury/netapp/csi-snapshotter
@@ -78,6 +93,8 @@ images:
     tag:
       - "v1.10.5"
       - "v1.10.13"
+      - "v1.15.9"
+      - "v1.17.0"
     destinations:
       - registry.sighup.io/fury/rook/ceph
 
