@@ -1,0 +1,80 @@
+name: 'Generate build and sync image lists'
+description: 'For the module in input, generate a list of image to build and a list of image to sync'
+inputs:
+  modules:
+    description: 'module list'
+    required: true
+outputs:
+  image_to_build:
+    description: 'JSON list of image to build'
+    value: ${{ steps.generate_lists.outputs.image_to_build }}
+  image_to_sync:
+    description: 'JSON list of image to sync'
+    value: ${{ steps.generate_lists.outputs.image_to_sync }}
+runs:
+  using: 'composite'
+  steps:
+    - name: generate build and sync image lists
+      id: generate_lists
+      shell: bash
+      run: |-
+        for module in ${{ inputs.modules }}
+        do
+          yq eval ".images |= map(. + {\"module\": \"$module\"})" modules/${module}/images.yml | yq eval '.images' >> all_images.yml
+        done
+                        
+        # Ensure that the module variable is passed correctly to jq using --arg
+        IMAGE_TO_BUILD_JSON=$(yq eval all_images.yml -ojson | jq -c '[.[] |
+          select(.build != null) |
+          .tag[] as $tag |
+          {
+            source: .source,
+            tag: $tag,
+            destination: (
+              .destinations | map("  \(. )") | join("\n")
+            ),
+            platforms: (
+              if .["multi-arch"] // true then
+                "linux/amd64,linux/arm64"
+              else
+                "linux/amd64"
+              end
+            ),
+            build: {
+              args: (
+                if .build.args == null then
+                  ""
+                else
+                  (.build.args | map("  \(.name)=\(.value)") | join("\n"))
+                end
+              ),
+              context: .build.context
+            },
+            module: .module
+          }
+        ]')
+
+        # Process images.yml to create IMAGE_TO_SYNC_JSON
+        IMAGE_TO_SYNC_JSON=$(yq eval all_images.yml -ojson | jq -c '[.[] |
+            select(.build == null) |
+            .tag[] as $t |
+            .destinations[] as $d |
+            {
+              "source": .source,
+              "tag": $t,
+              "destination": $d,
+              "multi-arch": (
+                if .["multi-arch"] == null
+                then
+                  true
+                else
+                  .["multi-arch"]
+                end
+              )
+            }
+          ]'
+        )
+        
+        # Set the output variables for subsequent steps
+        echo "image_to_build=$IMAGE_TO_BUILD_JSON" >> $GITHUB_OUTPUT
+        echo "image_to_sync=$IMAGE_TO_SYNC_JSON" >> $GITHUB_OUTPUT
