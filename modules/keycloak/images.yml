@@ -18,6 +18,7 @@ images:
       - "22.0.1"
       - "22.0.5"
       - "26.0.2"
+      - "26.2.2"
     destinations:
       - registry.sighup.io/fury/keycloak/keycloak
 
@@ -27,11 +28,12 @@ images:
       context: custom/keycloak
       args:
         - name: KEYCLOAK
-          value: "26.0.2"
+          value: "26.2.2"
         - name: KEYCLOAK_METRICS_SPI
-          value: "6.0.0"
+          value: "7.0.0"
     tag:
       - "26.0.2"
+      - "26.2.2"
     destinations:
       - registry.sighup.io/fury/keycloak/keycloak-spi-metrics
 
@@ -50,6 +52,7 @@ images:
       - "22.0.1"
       - "22.0.5"
       - "26.0.2"
+      - "26.2.2"
     destinations:
       - registry.sighup.io/fury/keycloak/keycloak-operator
 
