@@ -1,19 +1,19 @@
 images:
-  - name: Istio Citadel [Fury Kubernetes Service Mesh]
+  - name: Istio Citadel [Fury Kubernetes Istiod Addon] # da eliminaere
     source: docker.io/istio/citadel
     tag:
       - "1.4.2"
     destinations:
       - registry.sighup.io/fury/istio/citadel
 
-  - name: Istio proxy [Fury Kubernetes Service Mesh]
+  - name: Istio proxy [Fury Kubernetes Istiod Addon] # da eliminaere
     source: docker.io/istio/proxyv2
     tag:
       - "1.4.2"
     destinations:
       - registry.sighup.io/fury/istio/proxyv2
 
-  - name: Istio proxy [Fury Kubernetes Service Mesh]
+  - name: Istio proxy [Fury Kubernetes Istiod Addon]
     source: gcr.io/istio-release/proxyv2
     multi-arch: true
     tag:
@@ -31,34 +31,36 @@ images:
       - "1.22.2"
       - "1.23.3"
       - "1.24.0"
+      - "1.25.2"
     destinations:
       - registry.sighup.io/fury/istio/proxyv2
 
-  - name: Istio kubectl [Fury Kubernetes Service Mesh]
+  - name: Istio kubectl [Fury Kubernetes Istiod Addon] # da eliminaere
     source: docker.io/istio/kubectl
     tag:
       - "1.4.2"
     destinations:
       - registry.sighup.io/fury/istio/kubectl
 
-  - name: Istio jaeger [Fury Kubernetes Service Mesh]
+  - name: Istio jaeger [Fury Kubernetes Istiod Addon] # da eliminaere
     source: docker.io/jaegertracing/all-in-one
     tag:
       - "1.14"
     destinations:
       - registry.sighup.io/fury/jaegertracing/all-in-one
 
-  - name: Istio jaeger Operator[Fury Kubernetes Service Mesh]
+  - name: Istio jaeger Operator[Fury Kubernetes Istiod Addon]
     source: quay.io/jaegertracing/jaeger-operator
     tag:
       - "1.43.0"
       - "1.56.0"
       - "1.61.0"
       - "1.62.0"
+      - "1.65.0"
     destinations:
       - registry.sighup.io/fury/jaegertracing/jaeger-operator
 
-  - name: Istio Kiali [Fury Kubernetes Service Mesh]
+  - name: Istio Kiali [Fury Kubernetes Istiod Addon]
     source: quay.io/kiali/kiali
     tag:
       - "v1.9"
@@ -68,24 +70,26 @@ images:
       - "v1.86.0"
       - "v1.87.0"
       - "v2.0.0"
+      - "v2.8.0"
+      - "v2.9.0"
     destinations:
       - registry.sighup.io/fury/kiali/kiali
 
-  - name: Istio Mixer [Fury Kubernetes Service Mesh]
+  - name: Istio Mixer [Fury Kubernetes Istiod Addon]
     source: docker.io/istio/mixer
     tag:
       - "1.4.2"
     destinations:
       - registry.sighup.io/fury/istio/mixer
 
-  - name: Istio Pilot [Fury Kubernetes Service Mesh]
+  - name: Istio Pilot [Fury Kubernetes Istiod Addon] # da eliminaere
     source: docker.io/istio/pilot
     tag:
       - "1.4.2"
     destinations:
       - registry.sighup.io/fury/istio/pilot
 
-  - name: Istio Pilot [Fury Kubernetes Service Mesh]
+  - name: Istio Pilot [Fury Kubernetes Istiod Addon]
     source: gcr.io/istio-release/pilot
     tag:
       - "1.9.5"
@@ -102,10 +106,12 @@ images:
       - "1.22.2"
       - "1.23.3"
       - "1.24.0"
+      - "1.25.2"
+      - "1.25.2-distroless"
     destinations:
       - registry.sighup.io/fury/istio/pilot
 
-  - name: Istio Operator [Fury Kubernetes Service Mesh]
+  - name: Istio Operator [Fury Kubernetes Istiod Addon]
     source: gcr.io/istio-release/operator
     tag:
       - "1.9.5"
@@ -125,7 +131,21 @@ images:
     destinations:
       - registry.sighup.io/fury/istio/operator
 
-  - name: Istio Sidecar [Fury Kubernetes Service Mesh]
+  - name: Istio Install-CNI [Fury Kubernetes Istiod Addon]
+    source: docker.io/istio/install-cni
+    tag:
+      - "1.25.2-distroless"
+    destinations:
+      - registry.sighup.io/fury/istio/install-cni
+  
+  - name: Istio Ztunnel-CNI [Fury Kubernetes Istiod Addon]
+    source: docker.io/istio/ztunnel
+    tag:
+      - "1.25.2-distroless"
+    destinations:
+      - registry.sighup.io/fury/istio/ztunnel
+
+  - name: Istio Sidecar [Fury Kubernetes Istiod Addon] # da eliminare
     source: docker.io/istio/sidecar_injector
     tag:
       - "1.4.2"
@@ -136,6 +156,7 @@ images:
     source: docker.io/istio/examples-bookinfo-details-v1
     tag:
       - "1.15.0"
+      - "1.20.3"
     destinations:
       - registry.sighup.io/fury/istio/examples-bookinfo-details-v1
 
@@ -143,6 +164,7 @@ images:
     source: docker.io/istio/examples-bookinfo-ratings-v1
     tag:
       - "1.15.0"
+      - "1.20.3"
     destinations:
       - registry.sighup.io/fury/istio/examples-bookinfo-ratings-v1
 
@@ -150,6 +172,7 @@ images:
     source: docker.io/istio/examples-bookinfo-reviews-v1
     tag:
       - "1.15.0"
+      - "1.20.3"
     destinations:
       - registry.sighup.io/fury/istio/examples-bookinfo-reviews-v1
 
@@ -157,6 +180,7 @@ images:
     source: docker.io/istio/examples-bookinfo-reviews-v2
     tag:
       - "1.15.0"
+      - "1.20.3"
     destinations:
       - registry.sighup.io/fury/istio/examples-bookinfo-reviews-v2
 
@@ -164,6 +188,7 @@ images:
     source: docker.io/istio/examples-bookinfo-reviews-v3
     tag:
       - "1.15.0"
+      - "1.20.3"
     destinations:
       - registry.sighup.io/fury/istio/examples-bookinfo-reviews-v3
 
@@ -171,5 +196,6 @@ images:
     source: docker.io/istio/examples-bookinfo-productpage-v1
     tag:
       - "1.15.0"
+      - "1.20.3"
     destinations:
       - registry.sighup.io/fury/istio/examples-bookinfo-productpage-v1
