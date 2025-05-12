@@ -10,6 +10,7 @@ images:
       - "v1.32.7"
       - "v1.36.0"
       - "v1.36.5"
+      - "v1.38.0"
     destinations:
       - registry.sighup.io/fury/tigera/operator
 
@@ -34,6 +35,7 @@ images:
       - "v3.27.3"
       - "v3.29.0"
       - "v3.29.2"
+      - "v3.30.0"
     destinations:
       - registry.sighup.io/fury/calico/kube-controllers
 
@@ -59,6 +61,7 @@ images:
       - "v3.27.3"
       - "v3.29.0"
       - "v3.29.2"
+      - "v3.30.0"
     destinations:
       - registry.sighup.io/fury/calico/cni
 
@@ -84,6 +87,7 @@ images:
       - "v3.27.3"
       - "v3.29.0"
       - "v3.29.2"
+      - "v3.30.0"
     destinations:
       - registry.sighup.io/fury/calico/pod2daemon-flexvol
 
@@ -109,6 +113,7 @@ images:
       - "v3.27.3"
       - "v3.29.0"
       - "v3.29.2"
+      - "v3.30.0"
     destinations:
       - registry.sighup.io/fury/calico/node
 
@@ -123,6 +128,7 @@ images:
       - "v3.27.3"
       - "v3.29.0"
       - "v3.29.2"
+      - "v3.30.0"
     destinations:
       - registry.sighup.io/fury/calico/apiserver
 
@@ -137,6 +143,7 @@ images:
       - "v3.27.3"
       - "v3.29.0"
       - "v3.29.2"
+      - "v3.30.0"
     destinations:
       - registry.sighup.io/fury/calico/typha
 
@@ -152,6 +159,7 @@ images:
       - "v3.27.3"
       - "v3.29.0"
       - "v3.29.2"
+      - "v3.30.0"
     destinations:
       - registry.sighup.io/fury/calico/csi
 
@@ -167,8 +175,41 @@ images:
       - "v3.27.3"
       - "v3.29.0"
       - "v3.29.2"
+      - "v3.30.0"
     destinations:
       - registry.sighup.io/fury/calico/node-driver-registrar
+
+  - name: Calico Dikastes [Fury Networking Module]
+    source: docker.io/calico/dikastes
+    multi-arch: true
+    tag:
+      - "v3.30.0"
+    destinations:
+      - registry.sighup.io/fury/calico/dikastes
+
+  - name: Calico Goldmane [Fury Networking Module]
+    source: docker.io/calico/goldmane
+    multi-arch: true
+    tag:
+      - "v3.30.0"
+    destinations:
+      - registry.sighup.io/fury/calico/goldmane
+      
+  - name: Calico Whisker [Fury Networking Module]
+    source: docker.io/calico/whisker
+    multi-arch: true
+    tag:
+      - "v3.30.0"
+    destinations:
+      - registry.sighup.io/fury/calico/whisker
+
+  - name: Calico Whisker Backend [Fury Networking Module]
+    source: docker.io/calico/whisker-backend
+    multi-arch: true
+    tag:
+      - "v3.30.0"
+    destinations:
+      - registry.sighup.io/fury/calico/whisker-backend
 
   - name: Curl image used for Calico tests [Fury Networking Module]
     source: docker.io/curlimages/curl
