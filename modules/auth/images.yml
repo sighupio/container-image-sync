@@ -37,9 +37,9 @@ images:
     destinations:
       - registry.sighup.io/fury/dexidp/dex
 
-  - name: Gangway [Fury Kubernetes Auth]
-    source: gcr.io/heptio-images/gangway
-    tag:
-      - "v3.2.0"
-    destinations:
-      - registry.sighup.io/fury/heptio-images/gangway
+  # - name: Gangway [Fury Kubernetes Auth]
+  #   source: gcr.io/heptio-images/gangway
+  #   tag:
+  #     - "v3.2.0"
+  #   destinations:
+  #     - registry.sighup.io/fury/heptio-images/gangway
