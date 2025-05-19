@@ -37,6 +37,7 @@ images:
     destinations:
       - registry.sighup.io/fury/dexidp/dex
 
+  # Disabled because upstream is gone and makes the sync fail. We've been using our fork Gangplank for several releases anyway.
   # - name: Gangway [Fury Kubernetes Auth]
   #   source: gcr.io/heptio-images/gangway
   #   tag:
