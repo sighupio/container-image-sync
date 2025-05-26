@@ -137,13 +137,6 @@ images:
   destinations:
   - registry.sighup.io/fury/minio/mc
 
-- name: Minio MC (Latest) [Fury Kubernetes DR]
-  source: docker.io/minio/mc
-  tag:
-  - "latest"
-  destinations:
-  - registry.sighup.io/fury/minio/mc
-
 - name: Snapshot Controller [Fury Kubernetes DR]
   source: registry.k8s.io/sig-storage/snapshot-controller
   tag:
