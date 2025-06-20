@@ -4,7 +4,10 @@ images:
     tag:
       - "0.31.1"
       - "0.41.0"
+      - "0.42.0"
       - "0.43.0"
+      - "0.45.0"
+      - "0.46.0"
     destinations:
       - registry.sighup.io/fury/strimzi/operator
   - name: Strimzi Kafka Image [Fury Kubernetes Kafka]
@@ -20,9 +23,19 @@ images:
       - "0.41.0-kafka-3.6.1"
       - "0.41.0-kafka-3.6.2"
       - "0.41.0-kafka-3.7.0"
+      - "0.42.0-kafka-3.6.0"
+      - "0.42.0-kafka-3.6.1"
+      - "0.42.0-kafka-3.6.2"
+      - "0.42.0-kafka-3.7.0"
+      - "0.42.0-kafka-3.7.1"
       - "0.43.0-kafka-3.7.0"
       - "0.43.0-kafka-3.7.1"
       - "0.43.0-kafka-3.8.0"
+      - "0.45.0-kafka-3.8.0"
+      - "0.45.0-kafka-3.8.1"
+      - "0.45.0-kafka-3.9.0"
+      - "0.46.0-kafka-3.9.0"
+      - "0.46.0-kafka-4.0.0"
     destinations:
       - registry.sighup.io/fury/strimzi/kafka
   - name: Strimzi Kafka Bridge [Fury Kubernetes Kafka]
@@ -44,7 +57,10 @@ images:
     tag:
       - "0.31.1"
       - "0.41.0"
+      - "0.42.0"
       - "0.43.0"
+      - "0.45.0"
+      - "0.46.0"
     destinations:
       - registry.sighup.io/fury/strimzi/kaniko-executor
   - name: Strimzi Maven builder [Fury Kubernetes Kafka]
@@ -52,6 +68,9 @@ images:
     tag:
       - "0.31.1"
       - "0.41.0"
+      - "0.42.0"
       - "0.43.0"
+      - "0.45.0"
+      - "0.46.0"
     destinations:
       - registry.sighup.io/fury/strimzi/maven-builder
