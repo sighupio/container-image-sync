@@ -16,6 +16,7 @@ images:
       - v6.2.1
       - v6.2.2
       - v7.0.1
+      - v7.0.2
     destinations:
       - registry.sighup.io/fury/vsphere/csi-snapshotter
 
@@ -26,6 +27,7 @@ images:
       - v1.7.0
       - v1.8.0
       - v1.10.0
+      - v1.10.1
     destinations:
       - registry.sighup.io/fury/vsphere/csi-resizer
 
@@ -36,6 +38,7 @@ images:
       - v3.4.0
       - v3.5.0
       - v4.0.0
+      - v4.0.1
     destinations:
       - registry.sighup.io/fury/vsphere/csi-provisioner
 
@@ -46,6 +49,7 @@ images:
       - v2.7.0
       - v2.8.0
       - v2.10.0
+      - v2.10.1
     destinations:
       - registry.sighup.io/fury/vsphere/csi-node-driver-registrar
 
@@ -56,47 +60,40 @@ images:
       - v4.2.0
       - v4.3.0
       - v4.5.0
+      - v4.5.1
     destinations:
       - registry.sighup.io/fury/vsphere/csi-attacher
 
-###########################################
-####### Repo doesn't exist anymore ########
-###########################################
-#  - name: vSphere driver [Fury Kubernetes vSphere]
-#    source: gcr.io/cloud-provider-vsphere/csi/release/driver
-#    multi-arch: false
-#    tag:
-#      - v3.0.1
-#      - v3.1.2
-#      - v3.2.0
-#    destinations:
-#      - registry.sighup.io/fury/vsphere/vsphere-csi-driver
+  - name: vSphere driver [Fury Kubernetes vSphere]
+    source: registry.k8s.io/csi-vsphere/driver
+    multi-arch: false
+    tag:
+      - v3.0.1
+      - v3.1.2
+      - v3.2.0
+      - v3.3.1
+    destinations:
+      - registry.sighup.io/fury/vsphere/vsphere-csi-driver
 
+  - name: vSphere syncer [Fury Kubernetes vSphere]
+    source: registry.k8s.io/csi-vsphere/syncer
+    multi-arch: false
+    tag:
+      - v3.0.1
+      - v3.1.2
+      - v3.2.0
+      - v3.3.1
+    destinations:
+      - registry.sighup.io/fury/vsphere/vsphere-csi-syncer
 
-###########################################
-####### Repo doesn't exist anymore ########
-###########################################
-#  - name: vSphere syncer [Fury Kubernetes vSphere]
-#    source: gcr.io/cloud-provider-vsphere/csi/release/syncer
-#    multi-arch: false
-#    tag:
-#      - v3.0.1
-#      - v3.1.2
-#      - v3.2.0
-#    destinations:
-#      - registry.sighup.io/fury/vsphere/vsphere-csi-syncer
-
-
-###########################################
-####### Repo doesn't exist anymore ########
-###########################################
-#  - name: vSphere Cloud Provider [Fury Kubernetes vSphere]
-#    source: gcr.io/cloud-provider-vsphere/cpi/release/manager
-#    multi-arch: false
-#    tag:
-#      - v1.26.1
-#      - v1.27.0
-#      - v1.28.1
-#      - v1.29.0
-#    destinations:
-#      - registry.sighup.io/fury/vsphere/vsphere-cpi-manager
+  - name: vSphere Cloud Provider [Fury Kubernetes vSphere]
+    source: registry.k8s.io/cloud-pv-vsphere/cloud-provider-vsphere
+    multi-arch: false
+    tag:
+      - v1.26.1
+      - v1.27.0
+      - v1.28.1
+      - v1.29.0
+      - v1.30.1
+    destinations:
+      - registry.sighup.io/fury/cloud-pv-vsphere/cloud-provider-vsphere
