@@ -68,7 +68,6 @@ images:
     source: registry.k8s.io/csi-vsphere/driver
     multi-arch: false
     tag:
-      - v3.0.1
       - v3.1.2
       - v3.2.0
       - v3.3.1
@@ -79,7 +78,6 @@ images:
     source: registry.k8s.io/csi-vsphere/syncer
     multi-arch: false
     tag:
-      - v3.0.1
       - v3.1.2
       - v3.2.0
       - v3.3.1
@@ -90,8 +88,6 @@ images:
     source: registry.k8s.io/cloud-pv-vsphere/cloud-provider-vsphere
     multi-arch: false
     tag:
-      - v1.26.1
-      - v1.27.0
       - v1.28.1
       - v1.29.0
       - v1.30.1
