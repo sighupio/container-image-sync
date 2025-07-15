@@ -3,6 +3,7 @@ images:
     source: quay.io/ceph/ceph
     tag:
       - "v17.2.5"
+      - "v19"
       - "v19.2.2"
     destinations:
       - registry.sighup.io/fury/ceph/ceph
