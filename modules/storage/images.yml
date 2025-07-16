@@ -3,6 +3,7 @@ images:
     source: quay.io/ceph/ceph
     tag:
       - "v17.2.5"
+      - "v19"
       - "v19.2.2"
     destinations:
       - registry.sighup.io/fury/ceph/ceph
@@ -34,6 +35,7 @@ images:
       - "v4.6.0"
       - "v4.6.1"
       - "v4.8.0"
+      - "v4.8.1"
     destinations:
       - registry.sighup.io/fury/sig-storage/csi-attacher
       - registry.sighup.io/fury/netapp/csi-attacher
@@ -58,6 +60,7 @@ images:
       - "v4.0.1"
       - "v5.0.1"
       - "v5.1.0"
+      - "v5.2.0"
     destinations:
       - registry.sighup.io/fury/sig-storage/csi-provisioner
       - registry.sighup.io/fury/netapp/csi-provisioner
@@ -71,6 +74,7 @@ images:
       - "v1.11.0"
       - "v1.11.1"
       - "v1.13.1"
+      - "v1.13.2"
     destinations:
       - registry.sighup.io/fury/sig-storage/csi-resizer
       - registry.sighup.io/fury/netapp/csi-resizer
@@ -84,6 +88,7 @@ images:
       - "v7.0.2"
       - "v8.0.1"
       - "v8.2.0"
+      - "v8.2.1"
     destinations:
       - registry.sighup.io/fury/sig-storage/csi-snapshotter
       - registry.sighup.io/fury/netapp/csi-snapshotter
