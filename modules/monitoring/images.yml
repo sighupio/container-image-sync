@@ -16,12 +16,13 @@ images:
     destinations:
       - registry.sighup.io/fury/prometheus-adapter/prometheus-adapter
 
-  - name: Prometheus adapter direcxman (old version) [Fury Monitoring Module]
-    source: quay.io/coreos/k8s-prometheus-adapter-amd64
-    tag:
-      - "v0.5.0"
-    destinations:
-      - registry.sighup.io/fury/prometheus-adapter/prometheus-adapter
+  # This image is not available anymore on Quay.io and is making CI fail
+  # - name: Prometheus adapter direcxman (old version) [Fury Monitoring Module]
+  #   source: quay.io/coreos/k8s-prometheus-adapter-amd64
+  #   tag:
+  #     - "v0.5.0"
+  #   destinations:
+  #     - registry.sighup.io/fury/prometheus-adapter/prometheus-adapter
 
   - name: Alertmanager [Fury Monitoring Module]
     source: quay.io/prometheus/alertmanager
