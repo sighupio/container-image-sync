@@ -1,0 +1,13 @@
+- images:
+
+  - name: Kubelet automatic csr approver
+    source: kubelet-csr-approver
+    build:
+      context: custom/kubelet-csr-approver
+      args:
+        - name: ALPINE
+          value: "3.20"
+    tag:
+      - "1.0"
+    destinations:
+      - registry.sighup.io/fury/kubelet-csr-approver
