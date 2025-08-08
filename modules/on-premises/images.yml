@@ -151,3 +151,16 @@ images:
       - "v1.32.4"
     destinations:
       - registry.sighup.io/fury/on-premises/kube-scheduler
+
+
+  - name: Kubelet automatic csr approver
+    source: kubelet-csr-approver
+    build:
+      context: custom/kubelet-csr-approver
+      args:
+        - name: ALPINE
+          value: "3.20"
+    tag:
+      - "v1.0"
+    destinations:
+      - registry.sighup.io/fury/kubelet-csr-approver
