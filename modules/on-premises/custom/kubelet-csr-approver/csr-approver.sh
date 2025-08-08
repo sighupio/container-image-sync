@@ -331,7 +331,6 @@ process_csr() {
         return 1
     fi
  
-    echo "controllo altnames"
     if check_subj_altnames "$csr_name" "$node_name" ; then
         log_info "All subjectAltNames in $csr_name vare valid for Node $node_name"
     else
