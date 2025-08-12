@@ -1,0 +1,56 @@
+name: 'Docker build'
+description: 'build a docker image'
+inputs:
+  source:
+    description: "image source repository"
+    required: true
+  tag:
+    description: "image tag to build"
+    required: true
+  destination:
+    description: "image destination repository"
+    required: true
+  platforms:
+    description: "image supported platforms"
+    required: false
+    default: "linux/amd64,linux/arm64"
+  module:
+    description: "module name where is defined the image"
+    required: true
+  build_context:
+    description: "docker build context (don't put the modules/MODULE_NAME prefix)"
+    required: true
+  build_args:
+    description: "docker build args string"
+    required: false
+  dry_run:
+    description: "dry run mode enabled"
+    required: false
+    default: 'true'
+runs:
+  using: 'composite'
+  steps:
+    # Add support for more platforms with QEMU
+    # https://github.com/docker/setup-qemu-action
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      with:
+        platforms: ${{ matrix.image.platforms }}
+    - name: Docker meta for ${{ inputs.source }}:${{ inputs.tag }}
+      id: docker_meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ inputs.destination }}
+        tags: |
+          type=raw,value=${{ inputs.tag }}
+    - name: Build ${{ inputs.source }}:${{ inputs.tag }}
+      id: docker_build
+      uses: docker/build-push-action@v6
+      with:
+        context: modules/${{ inputs.module }}/${{ inputs.build_context }}
+        build-args: ${{ inputs.build_args }}
+        tags: ${{ steps.docker_meta.outputs.tags}}
+        platforms: ${{ inputs.platforms }}
+        push: ${{ inputs.dry_run != 'true' }}
