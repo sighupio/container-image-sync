@@ -219,6 +219,7 @@ images:
       - "v1.31.0"
       - "v1.31.1"
       - "v1.32.2"
+      - "v1.33.0"
     destinations:
       - registry.sighup.io/fury/kindest/node
 
