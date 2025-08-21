@@ -30,7 +30,7 @@ Features:
 - Configurable via YAML files
 - Build custom images
 - Skips images if the layers between src and dest are the same using `skopeo`
-- Everything is executed with bash script `single_sync_v3.sh` that by default will sync all image architectures
+- Everything is executed with bash script `scripts/sync.sh` that by default will sync all image architectures
 - Execute the vulnerability detection and patching of synced images with amd64 and arm64 architectures
 
 ## <a name="how-it-works">How it works</a>

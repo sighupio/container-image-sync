@@ -1,0 +1,88 @@
+[tools]
+# YAML processor for reading image configurations
+yq = "4.35.1"
+
+[tasks.test]
+description = "Run sync script tests"
+run = "./scripts/test-sync.sh"
+
+[tasks.sync]
+description = "Run sync for a module"
+run = """
+if [ -z "$1" ]; then
+  echo "Usage: mise run sync <module-path> [true|false]"
+  exit 1
+fi
+./scripts/sync.sh "$1" "${2:-true}"
+"""
+
+[tasks.dry-run]
+description = "Run sync in dry-run mode"
+run = "./scripts/sync.sh modules/_test/images.yml true"
+
+[tasks.test-actual]
+description = "Run actual sync tests with expected failure handling"
+run = "./scripts/test-sync.sh actual"
+
+[tasks.auth]
+description = "Set up SIGHUP registry authentication for local testing"
+run = """
+echo "🔐 Setting up authentication for SIGHUP registry..."
+echo ""
+echo "Note: Docker Hub login not needed for local testing (public images only)"
+echo ""
+echo "Please enter your SIGHUP registry credentials:"
+read -p "Username: " SIGHUP_USERNAME
+read -s -p "Password: " SIGHUP_PASSWORD
+echo ""
+echo ""
+echo "1. Setting up Docker login..."
+echo "$SIGHUP_PASSWORD" | docker login registry.sighup.io --username "$SIGHUP_USERNAME" --password-stdin
+echo ""
+echo "2. Setting up Skopeo authentication..."
+mkdir -p ./login
+docker run -v ./login:/login --rm quay.io/skopeo/stable:v1.16 login \
+  --username "$SIGHUP_USERNAME" \
+  --password "$SIGHUP_PASSWORD" \
+  registry.sighup.io --authfile=/login/auth.json
+echo ""
+echo "✅ Authentication setup complete!"
+echo "You can now run 'mise run test-actual' to test with real sync operations."
+"""
+
+[tasks.setup-buildx]
+description = "Setup Docker buildx for multi-platform builds (matches CI environment)"
+run = """
+echo "🔧 Setting up Docker buildx for multi-platform builds..."
+echo ""
+
+# Check if buildx is available
+if ! docker buildx version &>/dev/null; then
+    echo "❌ Docker buildx is not available. Please upgrade Docker to a version with buildx support."
+    exit 1
+fi
+
+# Remove existing builder if it exists
+if docker buildx ls | grep -q multi-platform-builder; then
+    echo "🗑️  Removing existing multi-platform-builder..."
+    docker buildx rm multi-platform-builder || true
+fi
+
+# Create new multi-platform builder
+echo "🏗️  Creating multi-platform builder..."
+docker buildx create --use --platform=linux/amd64,linux/arm64 --name multi-platform-builder
+
+# Bootstrap the builder (this may take a few moments)
+echo "🚀 Bootstrapping builder..."
+docker buildx inspect --bootstrap multi-platform-builder
+
+echo ""
+echo "✅ Buildx multi-platform builder ready!"
+echo ""
+echo "📋 Builder information:"
+docker buildx ls
+
+echo ""
+echo "🎯 You can now run multi-platform builds locally that match the CI environment."
+echo "   Example: docker buildx build --platform linux/amd64,linux/arm64 ."
+"""

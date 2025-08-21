@@ -1,0 +1,47 @@
+name: 'Container Registry Login'
+description: 'Login to Docker Hub and SIGHUP registries'
+
+inputs:
+  dockerhub_username:
+    description: 'Docker Hub username'
+    required: true
+  dockerhub_password:
+    description: 'Docker Hub password'
+    required: true
+  sighup_registry_username:
+    description: 'SIGHUP registry username'
+    required: true
+  sighup_registry_password:
+    description: 'SIGHUP registry password'
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ inputs.dockerhub_username }}
+        password: ${{ inputs.dockerhub_password }}
+
+    - name: Login to SIGHUP Registry
+      uses: docker/login-action@v3
+      with:
+        registry: registry.sighup.io
+        username: ${{ inputs.sighup_registry_username }}
+        password: ${{ inputs.sighup_registry_password }}
+
+    - name: Setup Skopeo authentication
+      shell: bash
+      run: |
+        echo "🔐 Setting up Skopeo authentication..."
+        mkdir -p ./login
+        docker run -v ./login:/login --rm quay.io/skopeo/stable:v1.16 login \
+          --username ${{ inputs.dockerhub_username }} \
+          --password ${{ inputs.dockerhub_password }} \
+          docker.io --authfile=/login/auth.json
+        docker run -v ./login:/login --rm quay.io/skopeo/stable:v1.16 login \
+          --username ${{ inputs.sighup_registry_username }} \
+          --password ${{ inputs.sighup_registry_password }} \
+          registry.sighup.io --authfile=/login/auth.json
+        echo "✅ Registry authentication configured"
