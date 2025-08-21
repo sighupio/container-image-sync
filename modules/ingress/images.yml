@@ -71,6 +71,7 @@ images:
       - "v1.14.2"
       - "v1.16.1"
       - "v1.17.1"
+      - "v1.18.2"
     destinations:
       - registry.sighup.io/fury/jetstack/cert-manager-cainjector
 
@@ -92,6 +93,7 @@ images:
       - "v1.14.2"
       - "v1.16.1"
       - "v1.17.1"
+      - "v1.18.2"
     destinations:
       - registry.sighup.io/fury/jetstack/cert-manager-controller
 
@@ -113,6 +115,7 @@ images:
       - "v1.14.2"
       - "v1.16.1"
       - "v1.17.1"
+      - "v1.18.2"
     destinations:
       - registry.sighup.io/fury/jetstack/cert-manager-webhook
 
@@ -122,6 +125,7 @@ images:
       - "v1.14.2"
       - "v1.16.1"
       - "v1.17.1"
+      - "v1.18.2"
     destinations:
       - registry.sighup.io/fury/jetstack/cert-manager-acmesolver
 
