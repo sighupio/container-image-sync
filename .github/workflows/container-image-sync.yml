@@ -94,8 +94,18 @@ jobs:
             echo "single-module=true" >> $GITHUB_OUTPUT
             echo "📦 Syncing single module: ${{ github.event.inputs.module }}"
           else
-            # All modules
-            MODULES=$(find modules -type d -mindepth 1 -maxdepth 1 | cut -d/ -f2 | sort | jq -R | jq -cs .)
+            # All modules - filter based on context
+            if [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/heads/main" ]] || 
+               [[ "${{ github.event_name }}" == "schedule" ]] ||
+               [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.ref }}" == "refs/heads/main" ]]; then
+              # Production runs: exclude test modules (starting with _)
+              echo "🚀 Production context: excluding test modules (starting with _)"
+              MODULES=$(find modules -type d -mindepth 1 -maxdepth 1 -not -name "_*" | cut -d/ -f2 | sort | jq -R | jq -cs .)
+            else
+              # Testing context (PRs, manual dispatch on non-main): include all modules
+              echo "🧪 Testing context: including all modules (including test modules)"
+              MODULES=$(find modules -type d -mindepth 1 -maxdepth 1 | cut -d/ -f2 | sort | jq -R | jq -cs .)
+            fi
             echo "modules=${MODULES}" >> $GITHUB_OUTPUT
             echo "single-module=false" >> $GITHUB_OUTPUT
             echo "📦 Discovered modules: ${MODULES}"
