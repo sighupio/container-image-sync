@@ -1,0 +1,202 @@
+name: 'Container Image Sync'
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+      - 'modules/**'
+      - 'scripts/**'
+      - 'config/versions.yml'
+      - '!README.md'
+      - '!DEVELOPMENT.md'
+
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/**'
+      - 'modules/**'
+      - 'scripts/**'
+      - 'config/versions.yml'
+      - '!README.md'
+
+  schedule:
+    # Daily sync at 2 AM UTC
+    - cron: '0 2 * * *'
+
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run in dry-run mode (preview commands only)'
+        required: false
+        default: false
+        type: boolean
+      module:
+        description: 'Specific module to sync (optional, syncs all if empty)'
+        required: false
+        default: ''
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  test-sync-script:
+    name: 'Test Sync Script'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup container tools
+        uses: ./.github/actions/setup-container-tools
+        with:
+          yq_version: ${{ vars.YQ_VERSION || '4.35.1' }}
+
+      - name: Setup QEMU for multi-platform builds
+        uses: docker/setup-qemu-action@v3
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          platforms: linux/amd64,linux/arm64
+
+      - name: Container registry login
+        uses: ./.github/actions/container-registry-login
+        with:
+          dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
+          dockerhub_password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          sighup_registry_username: ${{ secrets.SIGHUP_REGISTRY_USERNAME }}
+          sighup_registry_password: ${{ secrets.SIGHUP_REGISTRY_PASSWORD }}
+
+      - name: Run sync script tests
+        run: |
+          echo "🧪 Running comprehensive sync script validation..."
+          ./scripts/test-sync.sh
+
+  discover-modules:
+    name: 'Discover Modules'
+    runs-on: ubuntu-latest
+    needs: test-sync-script
+    outputs:
+      modules: ${{ steps.set-modules.outputs.modules }}
+      single-module: ${{ steps.set-modules.outputs.single-module }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Discover modules to sync
+        id: set-modules
+        run: |
+          if [[ -n "${{ github.event.inputs.module }}" ]]; then
+            # Single module specified via workflow dispatch
+            echo "modules=[\"${{ github.event.inputs.module }}\"]" >> $GITHUB_OUTPUT
+            echo "single-module=true" >> $GITHUB_OUTPUT
+            echo "📦 Syncing single module: ${{ github.event.inputs.module }}"
+          else
+            # All modules
+            MODULES=$(find modules -type d -mindepth 1 -maxdepth 1 | cut -d/ -f2 | sort | jq -R | jq -cs .)
+            echo "modules=${MODULES}" >> $GITHUB_OUTPUT
+            echo "single-module=false" >> $GITHUB_OUTPUT
+            echo "📦 Discovered modules: ${MODULES}"
+          fi
+
+  sync-images:
+    name: 'Sync Images'
+    runs-on: ubuntu-latest
+    needs: discover-modules
+    strategy:
+      fail-fast: false
+      matrix:
+        module: ${{ fromJson(needs.discover-modules.outputs.modules) }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup container tools
+        uses: ./.github/actions/setup-container-tools
+        with:
+          yq_version: ${{ vars.YQ_VERSION || '4.35.1' }}
+
+      - name: Setup QEMU for multi-platform builds
+        uses: docker/setup-qemu-action@v3
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          platforms: linux/amd64,linux/arm64
+
+      - name: Container registry login
+        if: ${{ github.event_name != 'pull_request' && !github.event.inputs.dry_run }}
+        uses: ./.github/actions/container-registry-login
+        with:
+          dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
+          dockerhub_password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          sighup_registry_username: ${{ secrets.SIGHUP_REGISTRY_USERNAME }}
+          sighup_registry_password: ${{ secrets.SIGHUP_REGISTRY_PASSWORD }}
+
+      - name: Sync module - ${{ matrix.module }}
+        run: |
+          echo "🔍 Verifying tool versions..."
+          yq --version
+          docker --version
+          docker run --rm quay.io/skopeo/stable:v1.16 --version
+          
+          # Smart dry-run detection:
+          # - PRs: always dry-run (safety first!)
+          # - Manual dispatch: use user's choice from UI
+          # - Main/schedule: actual sync
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            DRY_RUN="true"
+            echo "📋 Running in dry-run mode for PR validation"
+          else
+            DRY_RUN="${{ github.event.inputs.dry_run || 'false' }}"
+          fi
+          
+          echo "🚀 Starting sync for module: ${{ matrix.module }} (dry_run=${DRY_RUN})"
+          ./scripts/sync.sh "modules/${{ matrix.module }}/images.yml" "${DRY_RUN}"
+
+  sync-summary:
+    name: 'Sync Summary'
+    runs-on: ubuntu-latest
+    needs: [test-sync-script, discover-modules, sync-images]
+    if: always()
+    steps:
+      - name: Generate summary
+        run: |
+          echo "## 📊 Container Image Sync Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Show context
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "**Mode:** 🔍 PR Validation (dry-run)" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ github.event.inputs.dry_run }}" == "true" ]]; then
+            echo "**Mode:** 🏃 Manual Dry-Run" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "**Mode:** 🚀 Production Sync" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "**Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Test results
+          echo "### 🧪 Test Results" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ needs.test-sync-script.result }}" == "success" ]]; then
+            echo "**Script tests:** ✅ All tests passed" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.test-sync-script.result }}" == "failure" ]]; then
+            echo "**Script tests:** ❌ Tests failed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "**Script tests:** ⚠️ Tests skipped or cancelled" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Sync results  
+          echo "### 🔄 Sync Results" >> $GITHUB_STEP_SUMMARY
+          echo "**Modules processed:** ${{ join(fromJson(needs.discover-modules.outputs.modules), ', ') }}" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ needs.sync-images.result }}" == "success" ]]; then
+            echo "**Sync status:** ✅ All modules synced successfully" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.sync-images.result }}" == "failure" ]]; then
+            echo "**Sync status:** ❌ Some modules failed to sync" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "**Sync status:** ⚠️ Sync completed with warnings" >> $GITHUB_STEP_SUMMARY
+          fi

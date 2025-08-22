@@ -1,0 +1,9 @@
+# Container Image Sync Tool Versions
+# This file centralizes tool versions used by sync scripts
+
+tools:
+  # YAML processor for reading image configurations
+  yq: "v4.35.1"
+  
+  # Container image inspection and copying tool
+  skopeo: "v1.16.1"

@@ -1,0 +1,37 @@
+name: 'Setup Container Tools'
+description: 'Install and cache container sync tools'
+
+inputs:
+  yq_version:
+    description: 'yq version to install'
+    required: false
+    default: '4.35.1'
+
+runs:
+  using: composite
+  steps:
+    - name: Cache yq
+      uses: actions/cache@v4
+      with:
+        path: ~/.local/bin/yq
+        key: yq-${{ inputs.yq_version }}-${{ runner.os }}
+
+    - name: Install yq
+      shell: bash
+      run: |
+        if [[ ! -f ~/.local/bin/yq ]]; then
+          echo "📦 Installing yq ${{ inputs.yq_version }}"
+          mkdir -p ~/.local/bin
+          curl -sL https://github.com/mikefarah/yq/releases/download/v${{ inputs.yq_version }}/yq_linux_amd64 -o ~/.local/bin/yq
+          chmod +x ~/.local/bin/yq
+        else
+          echo "✅ yq ${{ inputs.yq_version }} already cached"
+        fi
+        echo "~/.local/bin" >> $GITHUB_PATH
+
+    - name: Verify tool installation
+      shell: bash
+      run: |
+        echo "🔍 Verifying tool installation..."
+        yq --version
+        docker --version

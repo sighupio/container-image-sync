@@ -1,0 +1,61 @@
+images:
+  # SUCCESS SCENARIOS - These should work correctly
+
+  - name: "[TEST] Pull-based single-arch sync"
+    source: docker.io/library/alpine
+    tag:
+      - "3.18"
+    destinations:
+      - registry.sighup.io/fury/testing/alpine
+
+  - name: "[TEST] Pull-based multi-arch sync"
+    source: docker.io/library/alpine
+    multi-arch: true
+    tag:
+      - "3.19"
+    destinations:
+      - registry.sighup.io/fury/testing/alpine
+
+  - name: "[TEST] Build-based single-arch sync"
+    source: test-build
+    multi-arch: false
+    build:
+      context: custom/valid-build
+      args:
+        - name: TEST_ARG
+          value: single-arch-test
+    tag:
+      - "single"
+    destinations:
+      - registry.sighup.io/fury/testing/build-test
+
+  - name: "[TEST] Build-based multi-arch sync"
+    source: test-build-multiarch
+    multi-arch: true
+    build:
+      context: custom/valid-build
+      args:
+        - name: TEST_ARG
+          value: multi-arch-test
+    tag:
+      - "multi"
+    destinations:
+      - registry.sighup.io/fury/testing/build-test
+
+  # ERROR SCENARIOS - These should fail gracefully
+
+  - name: "[TEST] Invalid source image (should fail)"
+    source: docker.io/nonexistent/invalid-image-for-testing
+    tag:
+      - "nonexistent-tag"
+    destinations:
+      - registry.sighup.io/fury/testing/should-fail
+
+  - name: "[TEST] Missing build context (should fail)"
+    source: test-invalid-build
+    build:
+      context: custom/nonexistent-build-context
+    tag:
+      - "should-fail"
+    destinations:
+      - registry.sighup.io/fury/testing/build-fail
