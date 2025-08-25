@@ -122,6 +122,7 @@ images:
   - "RELEASE.2024-10-13T13-34-11Z"
   - "RELEASE.2024-11-07T00-52-20Z"
   - "RELEASE.2025-02-28T09-55-16Z"
+  - "RELEASE.2025-07-23T15-54-02Z"
   destinations:
   - registry.sighup.io/fury/minio
 
@@ -138,6 +139,7 @@ images:
   - "RELEASE.2024-10-08T09-37-26Z"
   - "RELEASE.2024-11-05T11-29-45Z"
   - "RELEASE.2025-02-21T16-00-46Z"
+  - "RELEASE.2025-07-21T05-28-08Z"
   destinations:
   - registry.sighup.io/fury/minio/mc
 
