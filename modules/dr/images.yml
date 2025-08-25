@@ -18,6 +18,7 @@ images:
   - "v1.14.0"
   - "v1.15.0"
   - "v1.15.2"
+  - "v1.16.2"
   destinations:
   - registry.sighup.io/fury/velero/velero
 
@@ -37,6 +38,7 @@ images:
   - "v1.10.0"
   - "v1.11.0"
   - "v1.11.1"
+  - "v1.12.2"
   destinations:
   - registry.sighup.io/fury/velero/velero-plugin-for-aws
 
@@ -56,6 +58,7 @@ images:
   - "v1.10.0"
   - "v1.11.0"
   - "v1.11.1"
+  - "v1.12.2"
   destinations:
   - registry.sighup.io/fury/velero/velero-plugin-for-microsoft-azure
 
@@ -75,6 +78,7 @@ images:
   - "v1.10.0"
   - "v1.11.0"
   - "v1.11.1"
+  - "v1.12.2"
   destinations:
   - registry.sighup.io/fury/velero/velero-plugin-for-gcp
 
@@ -142,6 +146,8 @@ images:
   tag:
   - "v8.0.1"
   - "v8.2.0"
+  - "v8.2.1"
+  - "v8.3.0"
   destinations:
   - registry.sighup.io/fury/sig-storage/snapshot-controller
 
