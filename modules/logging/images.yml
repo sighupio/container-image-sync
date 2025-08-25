@@ -111,6 +111,7 @@ images:
       - "2.1.8"
       - "3.1.8"
       - "3.2.5"
+      - "4.0.3"
     destinations:
       - registry.sighup.io/fury/fluent/fluent-bit
 
@@ -163,6 +164,7 @@ images:
       - "4.5.6"
       - "4.10.0"
       - "5.2.0"
+      - "6.0.3"
     destinations:
       - registry.sighup.io/fury/banzaicloud/logging-operator
 
@@ -198,6 +200,7 @@ images:
     source: ghcr.io/kube-logging/logging-operator/fluentd	
     tag:
       - "5.2.0-full"
+      - "6.0.3-full"
     destinations:
       - registry.sighup.io/fury/banzaicloud/fluentd
 
