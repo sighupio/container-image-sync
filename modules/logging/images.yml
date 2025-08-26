@@ -247,6 +247,7 @@ images:
     source: ghcr.io/kube-logging/logging-operator/config-reloader
     tag:
       - "5.2.0"
+      - "6.0.3"
     destinations:
       - registry.sighup.io/fury/banzaicloud/config-reloader
 
