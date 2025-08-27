@@ -9,6 +9,7 @@ images:
       - "2.9.10"
       - "3.2.0"
       - "3.4.2"
+      - "3.5.3"
     destinations:
       - registry.sighup.io/fury/grafana/loki
 
@@ -267,6 +268,7 @@ images:
       - "1.25-alpine"
       - "1.27-alpine"
       - "1.27.3-alpine"
+      - "1.28.0-alpine"
     destinations:
       - registry.sighup.io/fury/nginxinc/nginx-unprivileged
   
