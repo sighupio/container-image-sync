@@ -46,8 +46,44 @@ images:
     destinations:
       - registry.sighup.io/fury/gatekeeper-policy-manager
 
+  # Newest Kyverno images are moved to a new registry.
+  # Changed in version v1.15
+  - name: Kyverno [SIGHUP Distribution Policy Module]
+    source: reg.kyverno.io/kyverno/kyverno
+    tag:
+      - "v1.15.1"
+    destinations:
+      - registry.sighup.io/fury/kyverno/kyverno
+      
+  - name: Kyverno Pre [SIGHUP Distribution Policy Module]
+    source: reg.kyverno.io/kyverno/kyvernopre
+    tag:
+      - "v1.15.1"
+    destinations:
+      - registry.sighup.io/fury/kyverno/kyvernopre
 
+  - name: Kyverno Background Controller [SIGHUP Distribution Policy Module]
+    source: reg.kyverno.io/kyverno/background-controller
+    tag:
+      - "v1.15.1"
+    destinations:
+      - registry.sighup.io/fury/kyverno/background-controller
 
+  - name: Kyverno Cleanup Controller [SIGHUP Distribution Policy Module]
+    source: reg.kyverno.io/kyverno/cleanup-controller
+    tag:
+      - "v1.15.1"
+    destinations:
+      - registry.sighup.io/fury/kyverno/cleanup-controller
+
+  - name: Kyverno Reports Controller [SIGHUP Distribution Policy Module]
+    source: reg.kyverno.io/kyverno/reports-controller
+    tag:
+      - "v1.15.1"
+    destinations:
+      - registry.sighup.io/fury/kyverno/reports-controller
+
+  # Older Kyverno images.
   - name: Kyverno [Fury OPA Module]
     source: ghcr.io/kyverno/kyverno
     tag:
