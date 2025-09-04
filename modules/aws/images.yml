@@ -8,6 +8,7 @@ images:
       - "v1.20.0"
       - "v1.22.1"
       - "v1.25.0"
+      - "v1.25.2"
     destinations:
       - registry.sighup.io/fury/aws-ec2/aws-node-termination-handler
 
