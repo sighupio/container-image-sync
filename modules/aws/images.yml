@@ -41,6 +41,7 @@ images:
       - "v2.7.0"
       - "v2.10.0"
       - "v2.12.0"
+      - "v2.13.4"
     destinations:
       - registry.sighup.io/fury/amazon/aws-alb-ingress-controller
 
