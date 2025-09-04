@@ -28,6 +28,7 @@ images:
       - "v1.31.0"
       - "v1.29.5"
       - "v1.32.0"
+      - "v1.33.0"
     destinations:
       - registry.sighup.io/fury/autoscaling/cluster-autoscaler
 
