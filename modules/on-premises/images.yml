@@ -29,6 +29,7 @@ images:
       - "v1.11.0"
       - "v1.11.1"
       - "v1.11.3"
+      - "v1.12.0"
     destinations:
       - registry.sighup.io/fury/on-premises/coredns/coredns
 
