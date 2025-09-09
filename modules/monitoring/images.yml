@@ -130,6 +130,7 @@ images:
     tag:
       - "v2.9.2"
       - "v2.13.0"
+      - "v2.16.0"
     destinations:
       - registry.sighup.io/fury/kube-state-metrics/kube-state-metrics
 
@@ -316,5 +317,6 @@ images:
       - "v1.5.0"
       - "v1.6.1"
       - "v1.8.2"
+      - "v1.9.1"
     destinations:
       - registry.sighup.io/fury/prometheus/node-exporter
