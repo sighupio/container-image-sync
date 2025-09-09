@@ -38,6 +38,7 @@ images:
       #- "v0.25.0"
       #- "v0.26.0"
       - "v0.27.0"
+      - "v0.28.1"
     destinations:
       - registry.sighup.io/fury/prometheus/alertmanager
 
@@ -49,6 +50,7 @@ images:
       #- "v0.23.0"
       - "v0.24.0"
       - "v0.25.0"
+      - "v0.27.0"
     destinations:
       - registry.sighup.io/fury/prometheus/blackbox-exporter
 
@@ -96,6 +98,7 @@ images:
       - "9.5.5"
       - "11.2.0"
       - "11.3.0"
+      - "12.1.0"
     destinations:
       - registry.sighup.io/fury/grafana/grafana
 
@@ -155,6 +158,7 @@ images:
       #- "v2.41.0"
       - "v2.46.0"
       - "v2.54.1"
+      - "v3.5.0"
     destinations:
       - registry.sighup.io/fury/prometheus
       - registry.sighup.io/fury/prometheus/prometheus
@@ -181,6 +185,7 @@ images:
       #- "v0.62.0"
       - "v0.67.1"
       - "v0.76.2"
+      - "v0.85.0"
     destinations:
       - registry.sighup.io/fury/prometheus-operator/prometheus-operator
 
@@ -206,6 +211,7 @@ images:
       #- "v0.62.0"
       - "v0.67.1"
       - "v0.76.2"
+      - "v0.85.0"
     destinations:
       - registry.sighup.io/fury/prometheus-operator/prometheus-config-reloader
 
@@ -293,6 +299,7 @@ images:
       - "v0.14.0"
       - "v0.14.2"
       - "v0.18.1"
+      - "v0.19.1"
     destinations:
       - registry.sighup.io/fury/brancz/kube-rbac-proxy
 
