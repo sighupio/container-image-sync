@@ -1,5 +1,4 @@
 images:
-
   # Buildkit fury-secured
   - name: buildkit
     source: docker.io/moby/buildkit
@@ -19,88 +18,88 @@ images:
 
   # Workshop images
 
-#  - name: redis latest
-#    source: docker.io/library/redis
-#    tag:
-#      - "latest"
-#    destinations:
-#      - registry.sighup.io/workshop/redis
-#
-#  - name: rancher Local Path Provisioner
-#    source: docker.io/rancher/local-path-provisioner
-#    tag:
-#      - "v0.0.20"
-#      - "v0.0.24"
-#    destinations:
-#      - registry.sighup.io/workshop/rancher/local-path-provisioner
-#
-#  - name: httpd latest
-#    source: docker.io/library/httpd
-#    tag:
-#      - "latest"
-#    destinations:
-#      - registry.sighup.io/workshop/httpd
-#
-#  - name: kodekloud event simulator
-#    source: docker.io/kodekloud/event-simulator
-#    tag:
-#      - "latest"
-#    destinations:
-#      - registry.sighup.io/workshop/kodekloud/event-simulator
-#
-#  - name: ubuntu latest
-#    source: docker.io/library/ubuntu
-#    tag:
-#      - "latest"
-#    destinations:
-#      - registry.sighup.io/workshop/ubuntu
-#
-#  - name: perl latest
-#    source: docker.io/library/perl
-#    tag:
-#      - "latest"
-#    destinations:
-#      - registry.sighup.io/workshop/perl
-#
-#  - name: sighup/powerapp-frontend latest
-#    source: docker.io/sighup/powerapp-frontend
-#    tag:
-#      - "latest"
-#    destinations:
-#      - registry.sighup.io/workshop/sighup/powerapp-frontend
-#
-#  - name: sighup/powerapp-backend latest
-#    source: docker.io/sighup/powerapp-backend
-#    tag:
-#      - "latest"
-#    destinations:
-#      - registry.sighup.io/workshop/sighup/powerapp-backend
-#
-#  - name: mongo
-#    source: docker.io/library/mongo
-#    tag:
-#      - "latest"
-#      - "4.1.5-xenial"
-#    destinations:
-#      - registry.sighup.io/workshop/mongo
-#
-#  - name: busybox
-#    source: docker.io/library/busybox
-#    tag:
-#      - "latest"
-#      - "1.28"
-#    destinations:
-#      - registry.sighup.io/workshop/busybox
-#
-#  - name: nginx
-#    source: docker.io/library/nginx
-#    tag:
-#      - "latest"
-#      - "alpine"
-#      - "1.7.9"
-#      - "1.20.1"
-#    destinations:
-#      - registry.sighup.io/workshop/nginx
+  #  - name: redis latest
+  #    source: docker.io/library/redis
+  #    tag:
+  #      - "latest"
+  #    destinations:
+  #      - registry.sighup.io/workshop/redis
+  #
+  #  - name: rancher Local Path Provisioner
+  #    source: docker.io/rancher/local-path-provisioner
+  #    tag:
+  #      - "v0.0.20"
+  #      - "v0.0.24"
+  #    destinations:
+  #      - registry.sighup.io/workshop/rancher/local-path-provisioner
+  #
+  #  - name: httpd latest
+  #    source: docker.io/library/httpd
+  #    tag:
+  #      - "latest"
+  #    destinations:
+  #      - registry.sighup.io/workshop/httpd
+  #
+  #  - name: kodekloud event simulator
+  #    source: docker.io/kodekloud/event-simulator
+  #    tag:
+  #      - "latest"
+  #    destinations:
+  #      - registry.sighup.io/workshop/kodekloud/event-simulator
+  #
+  #  - name: ubuntu latest
+  #    source: docker.io/library/ubuntu
+  #    tag:
+  #      - "latest"
+  #    destinations:
+  #      - registry.sighup.io/workshop/ubuntu
+  #
+  #  - name: perl latest
+  #    source: docker.io/library/perl
+  #    tag:
+  #      - "latest"
+  #    destinations:
+  #      - registry.sighup.io/workshop/perl
+  #
+  #  - name: sighup/powerapp-frontend latest
+  #    source: docker.io/sighup/powerapp-frontend
+  #    tag:
+  #      - "latest"
+  #    destinations:
+  #      - registry.sighup.io/workshop/sighup/powerapp-frontend
+  #
+  #  - name: sighup/powerapp-backend latest
+  #    source: docker.io/sighup/powerapp-backend
+  #    tag:
+  #      - "latest"
+  #    destinations:
+  #      - registry.sighup.io/workshop/sighup/powerapp-backend
+  #
+  #  - name: mongo
+  #    source: docker.io/library/mongo
+  #    tag:
+  #      - "latest"
+  #      - "4.1.5-xenial"
+  #    destinations:
+  #      - registry.sighup.io/workshop/mongo
+  #
+  #  - name: busybox
+  #    source: docker.io/library/busybox
+  #    tag:
+  #      - "latest"
+  #      - "1.28"
+  #    destinations:
+  #      - registry.sighup.io/workshop/busybox
+  #
+  #  - name: nginx
+  #    source: docker.io/library/nginx
+  #    tag:
+  #      - "latest"
+  #      - "alpine"
+  #      - "1.7.9"
+  #      - "1.20.1"
+  #    destinations:
+  #      - registry.sighup.io/workshop/nginx
 
   #- name: Kubectl
   #  source: quay.io/sighup/kubectl
@@ -264,6 +263,7 @@ images:
     source: ghcr.io/jimmidyson/configmap-reload
     tag:
       - "v0.13.1"
+      - "v0.15.0"
     destinations:
       - registry.sighup.io/fury/jimmidyson/configmap-reload
 
