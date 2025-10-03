@@ -41,6 +41,14 @@ DOCKERFILE_OUTPUT_DIR=.patching/dockerfile
 LOG_OUTPUT_DIR=.patching/log
 PATCH_ERROR_OUTPUT_FILE="${LOG_OUTPUT_DIR}/patch-error.log"
 
+SOURCE_POLICY_FILE="${SOURCE_POLICY_FILE:-$(dirname $0)/copacetic-source-policy.json}"
+if [ -f "${SOURCE_POLICY_FILE}" ]; then
+  export EXPERIMENTAL_BUILDKIT_SOURCE_POLICY="${SOURCE_POLICY_FILE}"
+  info "Using BuildKit source policy from ${SOURCE_POLICY_FILE}"
+else
+  warn "BuildKit source policy file ${SOURCE_POLICY_FILE} not found"
+fi
+
 if [ -z "$(docker ps -f name=buildkitd -q 2> /dev/null)" ]
 then
   info "Start buildkitd instance for COPA"
