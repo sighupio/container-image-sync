@@ -51,6 +51,7 @@ images:
       - "v2.4.2"
       - "v2.7.0"
       - "v2.9.5"
+      - "v2.11.2"
       - "v2.13.2"
     destinations:
       - registry.sighup.io/fury/goharbor/harbor-core
@@ -67,6 +68,7 @@ images:
       - "v2.4.2"
       - "v2.7.0"
       - "v2.9.5"
+      - "v2.11.2"
       - "v2.13.2"
     destinations:
       - registry.sighup.io/fury/goharbor/harbor-jobservice
@@ -111,6 +113,7 @@ images:
       - "v2.4.2"
       - "v2.7.0"
       - "v2.9.5"
+      - "v2.11.2"
       - "v2.13.2"
     destinations:
       - registry.sighup.io/fury/goharbor/harbor-portal
@@ -127,6 +130,7 @@ images:
       - "v2.4.2"
       - "v2.7.0"
       - "v2.9.5"
+      - "v2.11.2"
       - "v2.13.2"
     destinations:
       - registry.sighup.io/fury/goharbor/registry-photon
@@ -143,6 +147,7 @@ images:
       - "v2.4.2"
       - "v2.7.0"
       - "v2.9.5"
+      - "v2.11.2"
       - "v2.13.2"
     destinations:
       - registry.sighup.io/fury/goharbor/harbor-registryctl
@@ -159,6 +164,7 @@ images:
       - "v2.4.2"
       - "v2.7.0"
       - "v2.9.5"
+      - "v2.11.2"
       - "v2.13.2"
     destinations:
       - registry.sighup.io/fury/goharbor/redis-photon
@@ -175,6 +181,7 @@ images:
       - "v2.4.2"
       - "v2.7.0"
       - "v2.9.5"
+      - "v2.11.2"
       - "v2.13.2"
     destinations:
       - registry.sighup.io/fury/goharbor/harbor-db
@@ -190,6 +197,7 @@ images:
       - "v2.4.2"
       - "v2.7.0"
       - "v2.9.5"
+      - "v2.11.2"
       - "v2.13.2"
     destinations:
       - registry.sighup.io/fury/goharbor/trivy-adapter-photon
@@ -199,6 +207,7 @@ images:
     tag:
       - "v2.7.0"
       - "v2.9.5"
+      - "v2.11.2"
       - "v2.13.2"
     destinations:
       - registry.sighup.io/fury/goharbor/harbor-exporter
@@ -210,6 +219,7 @@ images:
     tag:
       - "v2.7.0"
       - "v2.9.5"
+      - "v2.11.2"
       - "v2.13.2"
     destinations:
       - registry.sighup.io/fury/goharbor/trivy-adapter-photon-offline
