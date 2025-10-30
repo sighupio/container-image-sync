@@ -8,13 +8,13 @@ images:
     destinations:
       - registry.sighup.io/fury-secured/moby/buildkit
 
-  # Images used in ReeVo Environments
-  - name: bitnami openldap [reevo/auth/extras]
-    source: docker.io/bitnami/openldap
-    tag:
-      - 2.6.9
-    destinations:
-      - registry.sighup.io/fury/bitnami/openldap
+  ## Images used in ReeVo Environments ### DISABLED DUE TO BITNAMI BECOMING CLOSED SOURCE
+  #- name: bitnami openldap [reevo/auth/extras]
+  #  source: docker.io/bitnami/openldap
+  #  tag:
+  #    - 2.6.9
+  #  destinations:
+  #    - registry.sighup.io/fury/bitnami/openldap
 
   # Workshop images
 
@@ -284,24 +284,24 @@ images:
     destinations:
       - registry.sighup.io/fury/sig-storage/nfs-subdir-external-provisioner
 
-  - name: RabbitMQ (bitnami)
-    source: docker.io/bitnami/rabbitmq
-    tag:
-      - 3.13.4-debian-12-r0
-    destinations:
-      - registry.sighup.io/fury/bitnami/rabbitmq
+  #- name: RabbitMQ (bitnami) ### DISABLED DUE TO BITNAMI BECOMING CLOSED SOURCE
+  #  source: docker.io/bitnami/rabbitmq
+  #  tag:
+  #    - 3.13.4-debian-12-r0
+  #  destinations:
+  #    - registry.sighup.io/fury/bitnami/rabbitmq
   
-  - name: Sealed secrets (bitnami)
-    source: docker.io/bitnami/sealed-secrets-controller
-    tag: 
-      - "0.27.1"
-      - "0.32.2"
-    destinations:
-      - registry.sighup.io/fury/bitnami/sealed-secrets-controller
+  #- name: Sealed secrets (bitnami) ### DISABLED DUE TO BITNAMI BECOMING CLOSED SOURCE
+  #  source: docker.io/bitnami/sealed-secrets-controller
+  #  tag: 
+  #    - "0.27.1"
+  #    - "0.32.2"
+  #  destinations:
+  #    - registry.sighup.io/fury/bitnami/sealed-secrets-controller
   
-  - name: Redis (bitnami)
-    source: docker.io/bitnami/redis
-    tag:
-      - 7.2.5-debian-12-r2
-    destinations:
-      - registry.sighup.io/fury/bitnami/redis
+  #- name: Redis (bitnami) ### DISABLED DUE TO BITNAMI BECOMING CLOSED SOURCE
+  #  source: docker.io/bitnami/redis
+  #  tag:
+  #    - 7.2.5-debian-12-r2
+  #  destinations:
+  #    - registry.sighup.io/fury/bitnami/redis

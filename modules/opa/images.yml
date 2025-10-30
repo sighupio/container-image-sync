@@ -136,15 +136,15 @@ images:
     destinations:
       - registry.sighup.io/fury/kyverno/reports-controller
 
-  - name: Kyverno Bitnami Kubectl [Fury OPA Module]
-    source: docker.io/bitnami/kubectl
-    tag:
-      - "1.26.10"
-      - "1.27.10"
-      - "1.28.5"
-      - "1.30.2"
-    destinations:
-      - registry.sighup.io/fury/bitnami/kubectl
+  #- name: Kyverno Bitnami Kubectl [Fury OPA Module] ### DISABLED DUE TO BITNAMI BECOMING CLOSED SOURCE
+  #  source: docker.io/bitnami/kubectl
+  #  tag:
+  #    - "1.26.10"
+  #    - "1.27.10"
+  #    - "1.28.5"
+  #    - "1.30.2"
+  #  destinations:
+  #    - registry.sighup.io/fury/bitnami/kubectl
 
   - name: Kyverno CLI [Fury OPA Module]
     source: ghcr.io/kyverno/kyverno-cli
