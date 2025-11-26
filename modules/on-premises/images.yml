@@ -164,7 +164,14 @@ images:
       - "v1.33.4"
     destinations:
       - registry.sighup.io/fury/on-premises/kube-scheduler
-
+  
+  - name: HAProxy [Fury Kubernetes On-Premises]
+    source: docker.io/library/haproxy
+    multi-arch: true
+    tag:
+      - "3.2.9"
+    destinations:
+      - registry.sighup.io/fury/on-premises/haproxy
 
   - name: Kubelet automatic csr approver
     source: kubelet-csr-approver
