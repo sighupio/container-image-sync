@@ -55,6 +55,7 @@ images:
     source: reg.kyverno.io/kyverno/kyverno
     tag:
       - "v1.15.1"
+      - "v1.16.0"
     destinations:
       - registry.sighup.io/fury/kyverno/kyverno
       
@@ -62,6 +63,7 @@ images:
     source: reg.kyverno.io/kyverno/kyvernopre
     tag:
       - "v1.15.1"
+      - "v1.16.0"
     destinations:
       - registry.sighup.io/fury/kyverno/kyvernopre
 
@@ -69,6 +71,7 @@ images:
     source: reg.kyverno.io/kyverno/background-controller
     tag:
       - "v1.15.1"
+      - "v1.16.0"
     destinations:
       - registry.sighup.io/fury/kyverno/background-controller
 
@@ -76,6 +79,7 @@ images:
     source: reg.kyverno.io/kyverno/cleanup-controller
     tag:
       - "v1.15.1"
+      - "v1.16.0"
     destinations:
       - registry.sighup.io/fury/kyverno/cleanup-controller
 
@@ -83,6 +87,7 @@ images:
     source: reg.kyverno.io/kyverno/reports-controller
     tag:
       - "v1.15.1"
+      - "v1.16.0"
     destinations:
       - registry.sighup.io/fury/kyverno/reports-controller
 
