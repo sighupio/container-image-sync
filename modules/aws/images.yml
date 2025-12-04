@@ -9,6 +9,7 @@ images:
       - "v1.22.1"
       - "v1.25.0"
       - "v1.25.2"
+      - "v1.25.3"
     destinations:
       - registry.sighup.io/fury/aws-ec2/aws-node-termination-handler
 
@@ -30,6 +31,7 @@ images:
       - "v1.29.5"
       - "v1.32.0"
       - "v1.33.0"
+      - "v1.34.0"
     destinations:
       - registry.sighup.io/fury/autoscaling/cluster-autoscaler
 
@@ -43,6 +45,7 @@ images:
       - "v2.10.0"
       - "v2.12.0"
       - "v2.13.4"
+      - "v2.16.0"
     destinations:
       - registry.sighup.io/fury/amazon/aws-alb-ingress-controller
 
