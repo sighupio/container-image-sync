@@ -15,6 +15,7 @@ images:
       - "nonroot-v0.27.1"
       - "nonroot-v0.28.0"
       - "nonroot-v0.30.5"
+      - "nonroot-v0.31.1"
     destinations:
       - registry.sighup.io/fury/pomerium/pomerium
 
