@@ -12,7 +12,7 @@ images:
       - "v1.36.5"
       - "v1.38.0"
       - "v1.38.6"
-      - "v1.40.2"
+      - "v1.40.3"
     destinations:
       - registry.sighup.io/fury/tigera/operator
 
@@ -39,7 +39,7 @@ images:
       - "v3.29.2"
       - "v3.30.0"
       - "v3.30.3"
-      - "v3.31.2"
+      - "v3.31.3"
     destinations:
       - registry.sighup.io/fury/calico/kube-controllers
 
@@ -67,7 +67,7 @@ images:
       - "v3.29.2"
       - "v3.30.0"
       - "v3.30.3"
-      - "v3.31.2"
+      - "v3.31.3"
     destinations:
       - registry.sighup.io/fury/calico/cni
 
@@ -95,7 +95,7 @@ images:
       - "v3.29.2"
       - "v3.30.0"
       - "v3.30.3"
-      - "v3.31.2"
+      - "v3.31.3"
     destinations:
       - registry.sighup.io/fury/calico/pod2daemon-flexvol
 
@@ -123,7 +123,7 @@ images:
       - "v3.29.2"
       - "v3.30.0"
       - "v3.30.3"
-      - "v3.31.2"
+      - "v3.31.3"
     destinations:
       - registry.sighup.io/fury/calico/node
 
@@ -140,7 +140,7 @@ images:
       - "v3.29.2"
       - "v3.30.0"
       - "v3.30.3"
-      - "v3.31.2"
+      - "v3.31.3"
     destinations:
       - registry.sighup.io/fury/calico/apiserver
 
@@ -157,7 +157,7 @@ images:
       - "v3.29.2"
       - "v3.30.0"
       - "v3.30.3"
-      - "v3.31.2"
+      - "v3.31.3"
     destinations:
       - registry.sighup.io/fury/calico/typha
 
@@ -175,7 +175,7 @@ images:
       - "v3.29.2"
       - "v3.30.0"
       - "v3.30.3"
-      - "v3.31.2"
+      - "v3.31.3"
     destinations:
       - registry.sighup.io/fury/calico/csi
 
@@ -193,7 +193,7 @@ images:
       - "v3.29.2"
       - "v3.30.0"
       - "v3.30.3"
-      - "v3.31.2"
+      - "v3.31.3"
     destinations:
       - registry.sighup.io/fury/calico/node-driver-registrar
 
@@ -203,7 +203,7 @@ images:
     tag:
       - "v3.30.0"
       - "v3.30.3"
-      - "v3.31.2"
+      - "v3.31.3"
     destinations:
       - registry.sighup.io/fury/calico/dikastes
 
@@ -213,7 +213,7 @@ images:
     tag:
       - "v3.30.0"
       - "v3.30.3"
-      - "v3.31.2"
+      - "v3.31.3"
     destinations:
       - registry.sighup.io/fury/calico/goldmane
       
@@ -223,7 +223,7 @@ images:
     tag:
       - "v3.30.0"
       - "v3.30.3"
-      - "v3.31.2"
+      - "v3.31.3"
     destinations:
       - registry.sighup.io/fury/calico/whisker
 
@@ -233,7 +233,7 @@ images:
     tag:
       - "v3.30.0"
       - "v3.30.3"
-      - "v3.31.2"
+      - "v3.31.3"
     destinations:
       - registry.sighup.io/fury/calico/whisker-backend
 
