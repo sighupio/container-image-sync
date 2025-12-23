@@ -52,6 +52,7 @@ images:
       - "v1.0.145"
       - "v1.0.156"
       - "v1.0.157"
+      - "v1.0.159"
     destinations:
       - registry.sighup.io/fury/stakater/forecastle
 
@@ -74,6 +75,7 @@ images:
       - "v1.16.1"
       - "v1.17.1"
       - "v1.18.2"
+      - "v1.19.2"
     destinations:
       - registry.sighup.io/fury/jetstack/cert-manager-cainjector
 
@@ -96,6 +98,7 @@ images:
       - "v1.16.1"
       - "v1.17.1"
       - "v1.18.2"
+      - "v1.19.2"
     destinations:
       - registry.sighup.io/fury/jetstack/cert-manager-controller
 
@@ -118,6 +121,7 @@ images:
       - "v1.16.1"
       - "v1.17.1"
       - "v1.18.2"
+      - "v1.19.2"
     destinations:
       - registry.sighup.io/fury/jetstack/cert-manager-webhook
 
@@ -128,6 +132,7 @@ images:
       - "v1.16.1"
       - "v1.17.1"
       - "v1.18.2"
+      - "v1.19.2"
     destinations:
       - registry.sighup.io/fury/jetstack/cert-manager-acmesolver
 
@@ -148,5 +153,6 @@ images:
       - "v0.15.0"
       - "v0.16.1"
       - "v0.18.0"
+      - "v0.20.0"
     destinations:
       - registry.sighup.io/fury/external-dns/external-dns
