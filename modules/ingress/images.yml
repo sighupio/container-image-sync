@@ -157,3 +157,10 @@ images:
       - "v0.20.0"
     destinations:
       - registry.sighup.io/fury/external-dns/external-dns
+
+  - name: HAProxy ingress controller [Module Ingress]
+    source: haproxytech/kubernetes-ingress
+    tag:
+      - "3.1.14"
+    destinations:
+      - registry.sighup.io/fury/haproxytech/kubernetes-ingress
