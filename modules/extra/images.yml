@@ -8,6 +8,22 @@ images:
     destinations:
       - registry.sighup.io/fury-secured/moby/buildkit
 
+  - name: MongoDB Exporter
+    source: quay.io/sighup/mongodb_exporter
+    multi-arch: true  # Force skopeo approach to handle manifest v1+prettyjws format
+    tag:
+      - "v0.6.2"
+    destinations:
+      - registry.sighup.io/fury/mongodb_exporter
+
+  - name: MongoDB Peer Finder
+    source: quay.io/sighup/mongo-peer-finder
+    multi-arch: true  # Force skopeo approach to handle manifest v1+prettyjws format
+    tag:
+      - "4.0.5_v3"
+    destinations:
+      - registry.sighup.io/fury/mongo-peer-finder
+
   ## Images used in ReeVo Environments ### DISABLED DUE TO BITNAMI BECOMING CLOSED SOURCE
   #- name: bitnami openldap [reevo/auth/extras]
   #  source: docker.io/bitnami/openldap
