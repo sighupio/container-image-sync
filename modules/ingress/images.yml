@@ -24,6 +24,7 @@ images:
       - "v1.13.1"
       - "v1.13.3"
       - "v1.14.1"
+      - "v1.14.3"
     destinations:
       - registry.sighup.io/fury/ingress-nginx/controller
 
