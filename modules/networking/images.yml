@@ -278,6 +278,7 @@ images:
       - "v1.16.3"
       - "v1.17.2"
       - "v1.18.1"
+      - "v1.19.0"
     destinations:
       - registry.sighup.io/fury/cilium/cilium
 
@@ -293,6 +294,7 @@ images:
       - "v1.16.3"
       - "v1.17.2"
       - "v1.18.1"
+      - "v1.19.0"
     destinations:
       - registry.sighup.io/fury/cilium/operator-generic
 
@@ -308,6 +310,7 @@ images:
       - "v1.16.3"
       - "v1.17.2"
       - "v1.18.1"
+      - "v1.19.0"
     destinations:
       - registry.sighup.io/fury/cilium/hubble-relay
 
