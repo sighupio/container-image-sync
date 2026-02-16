@@ -18,7 +18,7 @@ metadata:
 spec:
   # This value defines which KFD version will be installed and in consequence the Kubernetes version to use to create the cluster,
   # it supports git tags and branches
-  distributionVersion: feat/release-v1.34.0
+  distributionVersion: v1.34.0-rc.0
   # This section describes how the KFD distribution will be installed
   distribution:
     # This common configuration will be applied to all the packages that will be installed in the cluster
