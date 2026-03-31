@@ -164,6 +164,7 @@ images:
   source: docker.io/rclone/rclone
   tag:
   - "v1.69-stable"
+  - "v1.73-stable"
   destinations:
   - registry.sighup.io/fury/dr/etcd-backup/rclone
 
