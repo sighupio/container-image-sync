@@ -98,7 +98,11 @@ images:
     source: "source/image"           # Source image or build target name
     multi-arch: true                 # Optional, defaults to true
     build:                          # Optional, for build-based sync
-      context: "custom/build-dir"
+      context: "custom/build-dir"   # Path relative to images.yml (or relative
+                                    # to the clone root when git_source is used)
+      git_source:                   # Optional, build context from external repo
+        repo: "https://github.com/org/repo.git"
+        ref: "v1.2.3"               # tag or branch (not a raw commit SHA)
       args:
         - name: "BUILD_ARG"
           value: "value"
@@ -108,6 +112,11 @@ images:
     destinations:
       - "registry.sighup.io/fury/module/image"
 ```
+
+When `build.git_source` is present, the script shallow-clones the repo at
+the given ref into a tempdir and uses `<tempdir>/<context>` as the docker
+build context. See the [README](README.md#external-git-sources) and the
+[Chainguard forks catalog](docs/CHAINGUARD_FORKS.md) for details.
 
 ## Troubleshooting
 

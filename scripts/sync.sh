@@ -382,7 +382,7 @@ sync_build_based_image() {
     local build_args=""
     local build_args_count
     build_args_count=$(get_build_args_count "${config_file}" "${image_index}")
-    
+
     for (( arg_index=0; arg_index<build_args_count; arg_index++ )); do
         local arg_name
         local arg_value
@@ -390,8 +390,49 @@ sync_build_based_image() {
         arg_value=$(yq e ".images[${image_index}].build.args[${arg_index}].value" "${config_file}")
         build_args="${build_args} --build-arg ${arg_name}=${arg_value}"
     done
-    
-    local context_path="$(dirname "${config_file}")/${build_context}"
+
+    # Optional build.git_source: clone an external git repository at the given
+    # ref into a temporary directory and use it as the docker build context.
+    # When git_source is not set, falls back to the local context path (the
+    # default behavior). The temporary clone is removed when the function
+    # returns (success or failure) via a RETURN trap.
+    local git_repo
+    local git_ref
+    git_repo=$(yq e ".images[${image_index}].build.git_source.repo // \"\"" "${config_file}")
+    git_ref=$(yq e ".images[${image_index}].build.git_source.ref // \"\"" "${config_file}")
+
+    # Reject half-configured git_source: both repo and ref are required when
+    # either is set. Silent fallback to the local context would build the
+    # wrong image.
+    local git_repo_set="false"
+    local git_ref_set="false"
+    [[ -n "${git_repo}" && "${git_repo}" != "null" ]] && git_repo_set="true"
+    [[ -n "${git_ref}" && "${git_ref}" != "null" ]] && git_ref_set="true"
+    if [[ "${git_repo_set}" != "${git_ref_set}" ]]; then
+        tree_log error "├── " 2 "❌ build.git_source requires BOTH 'repo' and 'ref' to be set (got repo=${git_repo_set}, ref=${git_ref_set})"
+        return 1
+    fi
+
+    local context_path
+    if [[ "${git_repo_set}" == "true" && "${git_ref_set}" == "true" ]]; then
+        if [[ -z "${build_context}" || "${build_context}" == "null" ]]; then
+            tree_log error "├── " 2 "❌ build.context is required when build.git_source is set"
+            return 1
+        fi
+        if [[ "${dry_run}" == "true" ]]; then
+            tree_log info "├── " 2 "🏃 DRY RUN: Would clone ${git_repo}@${git_ref} (shallow) and use <tmp>/${build_context} as build context"
+            context_path="<tmp-clone>/${build_context}"
+        else
+            local tmp_clone
+            tmp_clone=$(mktemp -d "${TMPDIR:-/tmp}/cis-gitsrc.XXXXXX")
+            trap "rm -rf '${tmp_clone}'" RETURN
+            tree_log info "├── " 2 "📥 Cloning ${git_repo}@${git_ref} (shallow) for build context"
+            git clone --depth 1 --branch "${git_ref}" --single-branch "${git_repo}" "${tmp_clone}" >&2
+            context_path="${tmp_clone}/${build_context}"
+        fi
+    else
+        context_path="$(dirname "${config_file}")/${build_context}"
+    fi
     
     if [[ "${dry_run}" == "true" ]]; then
         if [[ "${multi_arch_enabled}" == "true" ]]; then

@@ -42,6 +42,25 @@ images:
     destinations:
       - registry.sighup.io/fury/testing/build-test
 
+  # Exercises build.git_source: the script must clone the external repo at the
+  # given ref into a tempdir and use <tempdir>/<context> as the docker build
+  # context. The tempdir must be removed at the end (success or failure).
+  - name: "[TEST] Build-based git_source sync"
+    source: test-build-gitsource
+    multi-arch: false
+    build:
+      git_source:
+        repo: https://github.com/docker-library/hello-world.git
+        ref: master
+      context: amd64/hello-world
+      args:
+        - name: TEST_ARG
+          value: git-source-test
+    tag:
+      - "gitsource"
+    destinations:
+      - registry.sighup.io/fury/testing/build-test
+
   # ERROR SCENARIOS - These should fail gracefully
 
   - name: "[TEST] Invalid source image (should fail)"

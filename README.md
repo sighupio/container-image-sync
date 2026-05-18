@@ -12,6 +12,7 @@
 # Table of contents
 - [Introduction](#introduction)
 - [How it works](#how-it-works)
+- [External git sources](#external-git-sources)
 - [Automated sync execution](#automated-sync-execution)
 - [Vulnerability detection and patching](#vulns-detect-and-patch)
 
@@ -87,6 +88,48 @@ Example `images.yml`:
     destinations:
       - registry.sighup.io/fury/grafana/grafana
 ```
+
+## <a name="external-git-sources">External git sources</a>
+
+Custom builds can take their build context from an external git repository
+instead of a path local to the module. This is useful when we want to build
+an image from a maintained fork (for example a security-patched fork of an
+upstream project) without vendoring the source code into this repository.
+
+Set `build.git_source` on the image entry:
+
+```yaml
+  - name: Example image from external repo
+    source: example-local-name
+    multi-arch: true
+    build:
+      git_source:
+        repo: https://github.com/some-org/some-repo.git
+        ref: v1.2.3                # tag or branch (not a raw commit SHA)
+      context: path/inside/the/clone
+      args:
+        - name: VERSION
+          value: "v1.2.3"
+    tag:
+      - "v1.2.3-custom"
+    destinations:
+      - registry.sighup.io/fury/example/image
+```
+
+How it works at sync time:
+
+- The script clones the repo shallow at the given `ref` into a temporary
+  directory and uses `<tempdir>/<context>` as the docker build context.
+- The temporary clone is removed when the entry finishes, regardless of
+  success or failure.
+- `build.context` is required when `git_source` is set; if it is missing
+  the entry fails with an explicit error.
+- When `git_source` is present, the local path
+  `dirname(images.yml)/<context>` is ignored.
+
+For the current catalog of Chainguard-maintained forks adopted with this
+mechanism (image mappings to the SIGHUP registry and bump procedures),
+see [`docs/CHAINGUARD_FORKS.md`](docs/CHAINGUARD_FORKS.md).
 
 ## <a name="automated-sync-execution">Automated sync execution</a>
 

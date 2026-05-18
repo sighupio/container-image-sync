@@ -172,6 +172,7 @@ test_dry_run_commands() {
         check_command_in_output "${output}" "docker://docker.io/library/alpine" "Alpine image reference" || all_passed=false
         check_command_in_output "${output}" "docker buildx build" "Build-based sync command" || all_passed=false
         check_command_in_output "${output}" "docker://registry.sighup.io/fury/testing/" "Test registry destination" || all_passed=false
+        check_command_in_output "${output}" "Would clone https://github.com/docker-library/hello-world.git" "git_source clone command" || all_passed=false
         
         if [[ "${all_passed}" == "true" ]]; then
             log_test_pass "All expected commands found in dry-run output"
