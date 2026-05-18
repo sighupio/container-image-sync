@@ -167,3 +167,50 @@ images:
       - "3.2.4"
     destinations:
       - registry.sighup.io/fury/haproxytech/kubernetes-ingress
+
+  # === Chainguard fork build cascade ===
+  # The two entries below build from the Chainguard-maintained fork
+  # (https://github.com/chainguard-forks/ingress-nginx). ORDER MATTERS:
+  # the nginx base image must be built and pushed BEFORE the controller,
+  # since the controller uses it as BASE_IMAGE. Do not reorder.
+  # See docs/CHAINGUARD_FORKS.md for the catalog and bump procedure.
+  #
+  # KNOWN LIMITATION (to fix in the future): the build.git_source schema
+  # accepts a single `ref`, while `tag` can be a list. As a result we can
+  # build only one version of the fork per entry: supporting multiple
+  # versions today requires duplicating the entry (one per ref). When we
+  # need to publish more than one supported line of the fork in parallel,
+  # extend the schema so that `git_source` and `tag` (and BASE_IMAGE) can
+  # be paired across multiple versions in a single entry.
+
+  - name: nginx base image [Chainguard fork]
+    source: ingress-nginx-chainguard-nginx
+    multi-arch: true
+    build:
+      git_source:
+        repo: https://github.com/chainguard-forks/ingress-nginx.git
+        ref: controller-v1.15.5
+      context: images/nginx/rootfs
+      # No build-args needed: the inner Dockerfile uses a fixed FROM alpine:3.23.3
+    tag:
+      - "v2.2.9-chainguard"
+    destinations:
+      - registry.sighup.io/fury/ingress-nginx/nginx
+
+  - name: nginx ingress controller [Chainguard fork]
+    source: ingress-nginx-chainguard-controller
+    multi-arch: true
+    build:
+      git_source:
+        repo: https://github.com/chainguard-forks/ingress-nginx.git
+        ref: controller-v1.15.5
+      context: rootfs
+      args:
+        - name: BASE_IMAGE
+          value: "registry.sighup.io/fury/ingress-nginx/nginx:v2.2.9-chainguard"
+        - name: VERSION
+          value: "v1.15.5"
+    tag:
+      - "v1.15.5-chainguard"
+    destinations:
+      - registry.sighup.io/fury/ingress-nginx/controller
