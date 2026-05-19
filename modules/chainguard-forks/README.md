@@ -6,8 +6,8 @@ upstream provenance, the reason we adopted the fork, the resulting registry
 mapping, the build cascade (when applicable), and the bump procedure.
 
 For the concrete versions currently in use, look at the corresponding
-`images.yml` — this document deliberately does not pin versions, so it
-does not go stale every time a tag is bumped.
+[`images.yml`](images.yml) — this document deliberately does not pin
+versions, so it does not go stale every time a tag is bumped.
 
 When adopting a new fork, append a section here using the same shape.
 
@@ -22,7 +22,7 @@ When adopting a new fork, append a section here using the same shape.
   the ingress-nginx modules compiled in: Lua, OpenTelemetry, ModSecurity,
   HTTP/3) and the Go controller. To benefit from those patches we have to
   build BOTH layers from the fork.
-- **Sync config**: [`modules/ingress/images.yml`](../modules/ingress/images.yml)
+- **Sync config**: [`images.yml`](images.yml)
 
 ### Images and registry mapping
 
@@ -45,17 +45,30 @@ ref is enough to drive both builds.
 The controller image's `BASE_IMAGE` build-arg points to the destination tag
 of the just-pushed nginx base image. For the cascade to resolve correctly
 the nginx base entry MUST appear before the controller entry in
-`modules/ingress/images.yml`. The sync script processes entries in order,
+[`images.yml`](images.yml). The sync script processes entries in order,
 so the order in the file determines the build order.
+
+The controller entry additionally requires a pre-build step: the fork's
+`rootfs/Dockerfile` is not self-contained and expects pre-cross-compiled Go
+binaries at `rootfs/bin/<arch>/{nginx-ingress-controller,dbg,wait-shutdown}`.
+Those are produced by the fork's own `make build ARCH=<arch>` target (which
+wraps `go build` inside a `golang:VERSION-alpine3.23` container via
+`build/run-in-docker.sh`). This is configured via `build.pre_build_commands`
+on the controller entry, with one `make build` invocation per target
+architecture. Pass `TAG=<controller-version>` explicitly to embed the
+correct release string in the Go binary (the fork's root `TAG` file is
+inconsistent with its git tags).
 
 ### Bump procedure
 
 1. Look up the latest `controller-v*` tag in the fork and read
    `images/nginx/TAG` at that tag to get the matching nginx version.
-2. Update [`modules/ingress/images.yml`](../modules/ingress/images.yml):
+2. Update [`images.yml`](images.yml):
    - Both entries: `build.git_source.ref` → the new fork tag.
    - nginx entry: `tag` value → `<NEW_NGINX_VERSION>-chainguard`.
    - controller entry:
+     - `build.pre_build_commands` → both lines updated to
+       `make build ARCH=<arch> TAG=<NEW_CONTROLLER_VERSION>`.
      - `build.args[name=BASE_IMAGE].value` → must match the new nginx
        destination tag exactly (this is the cross-reference that the
        cascade depends on).

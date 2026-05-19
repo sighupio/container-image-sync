@@ -127,9 +127,44 @@ How it works at sync time:
 - When `git_source` is present, the local path
   `dirname(images.yml)/<context>` is ignored.
 
+### Pre-build commands
+
+Some forks ship Dockerfiles that are NOT self-contained — they require code
+generation, Go cross-compilation, or other prep before `docker build` can run
+(for example the Chainguard `ingress-nginx` fork's `rootfs/Dockerfile` does
+`COPY bin/${TARGETARCH}/...` expecting Go binaries that the project's own
+`make build ARCH=<arch>` target produces).
+
+To handle this, add `build.pre_build_commands`: a list of shell command strings
+executed sequentially with `bash -c`, in `dirname(<context>)` (the parent of
+the docker build context — i.e. the clone root for `git_source` builds), AFTER
+the clone and BEFORE the `docker buildx build`. If any command fails the entry
+aborts.
+
+```yaml
+  - name: Example with pre-build
+    source: example-local-name
+    multi-arch: true
+    build:
+      git_source:
+        repo: https://github.com/some-org/some-repo.git
+        ref: v1.2.3
+      pre_build_commands:
+        - "make build ARCH=amd64 TAG=v1.2.3"
+        - "make build ARCH=arm64 TAG=v1.2.3"
+      context: rootfs
+      args:
+        - name: VERSION
+          value: "v1.2.3"
+    tag:
+      - "v1.2.3-custom"
+    destinations:
+      - registry.sighup.io/fury/example/image
+```
+
 For the current catalog of Chainguard-maintained forks adopted with this
 mechanism (image mappings to the SIGHUP registry and bump procedures),
-see [`docs/CHAINGUARD_FORKS.md`](docs/CHAINGUARD_FORKS.md).
+see [`modules/chainguard-forks/README.md`](modules/chainguard-forks/README.md).
 
 ## <a name="automated-sync-execution">Automated sync execution</a>
 
