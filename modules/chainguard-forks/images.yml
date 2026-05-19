@@ -1,0 +1,63 @@
+# Container image builds derived from Chainguard-maintained forks of archived
+# or otherwise unmaintained upstream projects. Distinct from `modules/ingress/`
+# (and similar domain modules) which mirror upstream images verbatim: the
+# entries here BUILD images from source on every sync, so the lifecycle and
+# cadence are different.
+#
+# See README.md (sibling) for the catalog (which forks, why we adopted them,
+# registry mapping, bump procedure).
+#
+# ORDER MATTERS within the file: where one entry's BASE_IMAGE references
+# another entry's destination tag, the producer entry must appear first.
+# The sync script processes entries sequentially.
+#
+# KNOWN LIMITATION (to fix in the future): build.git_source schema accepts a
+# single `ref`, while `tag` can be a list. As a result we can build only one
+# version of the fork per entry: supporting multiple versions today requires
+# duplicating the entry (one per ref). When we need to publish more than one
+# supported line of a fork in parallel, extend the schema so git_source,
+# tag, and BASE_IMAGE can be paired across multiple versions in one entry.
+
+images:
+  - name: nginx base image [Chainguard fork]
+    source: ingress-nginx-chainguard-nginx
+    multi-arch: true
+    build:
+      git_source:
+        repo: https://github.com/chainguard-forks/ingress-nginx.git
+        ref: controller-v1.15.5
+      context: images/nginx/rootfs
+      # No build-args needed: the inner Dockerfile uses a fixed FROM alpine:3.23.3
+    tag:
+      - "v2.2.9-chainguard"
+    destinations:
+      - registry.sighup.io/fury/ingress-nginx/nginx
+
+  - name: nginx ingress controller [Chainguard fork]
+    source: ingress-nginx-chainguard-controller
+    multi-arch: true
+    build:
+      git_source:
+        repo: https://github.com/chainguard-forks/ingress-nginx.git
+        ref: controller-v1.15.5
+      # Pre-build: rootfs/Dockerfile is NOT self-contained. The commands below
+      # cross-compile the Go binaries (controller, dbg, wait-shutdown) for
+      # both target architectures via the fork's own `make build`, which runs
+      # inside a golang:VERSION-alpine3.23 container via build/run-in-docker.sh.
+      # Output lands in <clone>/rootfs/bin/<arch>/* which the docker buildx
+      # build then COPYs into the final image.
+      # TAG=v1.15.5 is explicit because the fork's root TAG file is
+      # inconsistent with the git tag (reads v1.15.0 at controller-v1.15.5).
+      pre_build_commands:
+        - "make build ARCH=amd64 TAG=v1.15.5"
+        - "make build ARCH=arm64 TAG=v1.15.5"
+      context: rootfs
+      args:
+        - name: BASE_IMAGE
+          value: "registry.sighup.io/fury/ingress-nginx/nginx:v2.2.9-chainguard"
+        - name: VERSION
+          value: "v1.15.5"
+    tag:
+      - "v1.15.5-chainguard"
+    destinations:
+      - registry.sighup.io/fury/ingress-nginx/controller

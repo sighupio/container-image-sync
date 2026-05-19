@@ -42,9 +42,10 @@ images:
     destinations:
       - registry.sighup.io/fury/testing/build-test
 
-  # Exercises build.git_source: the script must clone the external repo at the
-  # given ref into a tempdir and use <tempdir>/<context> as the docker build
-  # context. The tempdir must be removed at the end (success or failure).
+  # Exercises build.git_source AND build.pre_build_commands. The script must
+  # clone the external repo at the given ref into a tempdir, run the pre-build
+  # commands sequentially in dirname(context), and then use <tempdir>/<context>
+  # as the docker build context. The tempdir must be removed at the end.
   - name: "[TEST] Build-based git_source sync"
     source: test-build-gitsource
     multi-arch: false
@@ -52,6 +53,10 @@ images:
       git_source:
         repo: https://github.com/docker-library/hello-world.git
         ref: master
+      # Benign side-effect-free command, only used to verify the
+      # pre_build_commands code path is exercised in the test suite.
+      pre_build_commands:
+        - "ls -la"
       context: amd64/hello-world
       args:
         - name: TEST_ARG

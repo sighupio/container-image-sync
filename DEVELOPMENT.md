@@ -103,6 +103,9 @@ images:
       git_source:                   # Optional, build context from external repo
         repo: "https://github.com/org/repo.git"
         ref: "v1.2.3"               # tag or branch (not a raw commit SHA)
+      pre_build_commands:           # Optional, shell commands run in
+        - "make build ARCH=amd64"   # dirname(context) before the docker
+        - "make build ARCH=arm64"   # build (e.g. cross-compile, codegen)
       args:
         - name: "BUILD_ARG"
           value: "value"
@@ -116,7 +119,7 @@ images:
 When `build.git_source` is present, the script shallow-clones the repo at
 the given ref into a tempdir and uses `<tempdir>/<context>` as the docker
 build context. See the [README](README.md#external-git-sources) and the
-[Chainguard forks catalog](docs/CHAINGUARD_FORKS.md) for details.
+[Chainguard forks catalog](modules/chainguard-forks/README.md) for details.
 
 ## Troubleshooting
 

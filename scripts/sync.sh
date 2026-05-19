@@ -433,7 +433,31 @@ sync_build_based_image() {
     else
         context_path="$(dirname "${config_file}")/${build_context}"
     fi
-    
+
+    # Optional build.pre_build_commands: list of shell commands executed
+    # sequentially in dirname(context_path) AFTER the (optional) git_source
+    # clone and BEFORE the docker buildx build. Used for builds whose
+    # Dockerfile is not self-contained and requires code generation,
+    # cross-compilation, or other prep — e.g. the Chainguard ingress-nginx
+    # fork needs `make build ARCH=<x>` to produce Go binaries that the
+    # controller Dockerfile then COPYs into the final image.
+    local pre_build_count
+    pre_build_count=$(yq e ".images[${image_index}].build.pre_build_commands | length // 0" "${config_file}")
+    if [[ "${pre_build_count}" != "null" && "${pre_build_count}" -gt 0 ]]; then
+        local pre_build_cwd
+        pre_build_cwd=$(dirname "${context_path}")
+        for (( pb_index=0; pb_index<pre_build_count; pb_index++ )); do
+            local pb_cmd
+            pb_cmd=$(yq e ".images[${image_index}].build.pre_build_commands[${pb_index}]" "${config_file}")
+            if [[ "${dry_run}" == "true" ]]; then
+                tree_log info "├── " 2 "🏃 DRY RUN: Would run pre-build (cwd=${pre_build_cwd}): ${pb_cmd}"
+            else
+                tree_log info "├── " 2 "🔧 Running pre-build (cwd=${pre_build_cwd}): ${pb_cmd}"
+                ( cd "${pre_build_cwd}" && bash -c "${pb_cmd}" >&2 )
+            fi
+        done
+    fi
+
     if [[ "${dry_run}" == "true" ]]; then
         if [[ "${multi_arch_enabled}" == "true" ]]; then
             tree_log info "├── " 2 "🏃 DRY RUN: Would build multi-arch image to ${first_destination}:${tag}"
