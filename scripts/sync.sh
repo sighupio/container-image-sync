@@ -425,7 +425,12 @@ sync_build_based_image() {
         else
             local tmp_clone
             tmp_clone=$(mktemp -d "${TMPDIR:-/tmp}/cis-gitsrc.XXXXXX")
-            trap "rm -rf '${tmp_clone}'" RETURN
+            # Best-effort cleanup: pre-build steps (e.g. `make build` running as
+            # root inside a Go container) can leave root-owned files in the
+            # tempdir that the runner user cannot remove. We silently swallow
+            # the failures so a "good" sync (images already pushed) isn't
+            # marked failed by a leftover-cleanup error.
+            trap "rm -rf '${tmp_clone}' 2>/dev/null || true" RETURN
             tree_log info "├── " 2 "📥 Cloning ${git_repo}@${git_ref} (shallow) for build context"
             git clone --depth 1 --branch "${git_ref}" --single-branch "${git_repo}" "${tmp_clone}" >&2
             context_path="${tmp_clone}/${build_context}"
