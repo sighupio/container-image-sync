@@ -48,9 +48,14 @@ images:
       # build then COPYs into the final image.
       # TAG=v1.15.5 is explicit because the fork's root TAG file is
       # inconsistent with the git tag (reads v1.15.0 at controller-v1.15.5).
+      # The final chown re-owns to the host user the files written by `make
+      # build` (which runs as root inside the golang container): without it,
+      # the sync.sh RETURN trap fails to `rm -rf` the tempdir → job exits 1
+      # even though both images pushed successfully.
       pre_build_commands:
         - "make build ARCH=amd64 TAG=v1.15.5"
         - "make build ARCH=arm64 TAG=v1.15.5"
+        - "docker run --rm -v $(pwd):/work alpine chown -R $(id -u):$(id -g) /work"
       context: rootfs
       args:
         - name: BASE_IMAGE
