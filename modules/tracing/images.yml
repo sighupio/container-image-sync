@@ -7,6 +7,7 @@ images:
       - "2.6.0"
       - "2.7.1"
       - "2.8.2"
+      - "2.10.5"
     destinations:
       - registry.sighup.io/fury/grafana/tempo
 
