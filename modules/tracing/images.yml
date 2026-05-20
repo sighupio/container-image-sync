@@ -16,6 +16,7 @@ images:
     tag:
       - "1.5.17-alpine"
       - "1.6.37-alpine"
+      - "1.6.39-alpine"
     destinations:
       - registry.sighup.io/fury/memcached
 
