@@ -16,6 +16,7 @@ images:
       - "nonroot-v0.28.0"
       - "nonroot-v0.30.5"
       - "nonroot-v0.31.1"
+      - "nonroot-v0.32.7"
     destinations:
       - registry.sighup.io/fury/pomerium/pomerium
 
@@ -37,6 +38,7 @@ images:
       - "v2.41.1"
       - "v2.42.0"
       - "v2.44.0"
+      - "v2.45.1"
     destinations:
       - registry.sighup.io/fury/dexidp/dex
 
