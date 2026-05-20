@@ -4,3 +4,4 @@ CVEs/v*/.scan
 CVEs/v*/*.log
 CVEs/v*/built.yaml
 CVEs/.patching
+/.idea/
