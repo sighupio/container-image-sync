@@ -271,6 +271,7 @@ images:
       - "1.28.0-alpine"
       - "1.28-alpine"
       - "1.29-alpine"
+      - "1.31-alpine"
     destinations:
       - registry.sighup.io/fury/nginxinc/nginx-unprivileged
   
