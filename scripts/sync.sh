@@ -439,6 +439,17 @@ sync_build_based_image() {
         context_path="$(dirname "${config_file}")/${build_context}"
     fi
 
+    # Optional build.dockerfile: name of an alternative Dockerfile inside the
+    # context directory (e.g. "Dockerfile.dev"). When omitted Docker uses the
+    # default "Dockerfile" in the context root.
+    local dockerfile
+    dockerfile=$(yq e ".images[${image_index}].build.dockerfile // \"\"" "${config_file}")
+
+    local dockerfile_flag=""
+    if [[ -n "${dockerfile}" ]]; then
+        dockerfile_flag="-f ${context_path}/${dockerfile}"
+    fi
+
     # Optional build.pre_build_commands: list of shell commands executed
     # sequentially in dirname(context_path) AFTER the (optional) git_source
     # clone and BEFORE the docker buildx build. Used for builds whose
@@ -473,10 +484,10 @@ sync_build_based_image() {
             else
                 tree_log info "├── " 3 "       --build-arg IMAGETAG=${tag} \\"
             fi
-            tree_log info "└── " 3 "       -t ${first_destination}:${tag} ${context_path}"
+            tree_log info "└── " 3 "       ${dockerfile_flag} -t ${first_destination}:${tag} ${context_path}"
         else
             tree_log info "├── " 2 "🏃 DRY RUN: Would build single-arch image ${source_image}:${tag}"
-            tree_log info "├── " 3 "docker build${build_args} --build-arg IMAGETAG=${tag} \\"
+            tree_log info "├── " 3 "docker build ${dockerfile_flag}${build_args} --build-arg IMAGETAG=${tag} \\"
             tree_log info "└── " 3 "       -t ${source_image}:${tag} ${context_path}"
         fi
         return 0
@@ -489,10 +500,10 @@ sync_build_based_image() {
         run_with_indent 4 docker buildx build --push \
             --platform linux/amd64,linux/arm64 \
             ${build_args} --build-arg IMAGETAG="${tag}" \
-            -t "${target_image}" "${context_path}"
+            ${dockerfile_flag} -t "${target_image}" "${context_path}"
     else
         tree_log info "├── " 2 "🏗️  Building single-arch image ${source_image}:${tag}"
-        run_with_indent 4 docker build ${build_args} --build-arg IMAGETAG="${tag}" \
+        run_with_indent 4 docker build ${dockerfile_flag} ${build_args} --build-arg IMAGETAG="${tag}" \
             -t "${source_image}:${tag}" "${context_path}"
     fi
 }
