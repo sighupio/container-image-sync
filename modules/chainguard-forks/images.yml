@@ -66,3 +66,17 @@ images:
       - "v1.15.5-chainguard"
     destinations:
       - registry.sighup.io/fury/ingress-nginx/controller
+
+  - name: MinIO 20260520 [Chainguard fork]
+    source: minio-chainguard-fork-20260520
+    multi-arch: true
+    build:
+      git_source:
+        repo: https://github.com/chainguard-forks/minio.git
+        ref: RELEASE.2026-05-20T23-44-52Z
+      dockerfile: Dockerfile.dev
+      context: .
+    tag:
+      - "RELEASE.2026-05-20T23-44-52Z-chainguard"
+    destinations:
+      - registry.sighup.io/fury/minio
