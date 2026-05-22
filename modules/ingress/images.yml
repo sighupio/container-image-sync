@@ -173,5 +173,6 @@ images:
     tag:
       - "3.1.14"
       - "3.2.4"
+      - "3.2.8"
     destinations:
       - registry.sighup.io/fury/haproxytech/kubernetes-ingress
