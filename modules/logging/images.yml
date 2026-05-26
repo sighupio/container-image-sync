@@ -280,6 +280,7 @@ images:
     tag:
       - "1.6.23-alpine"
       - "1.6.31-alpine"
+      - "1.6.39-alpine"
     destinations:
       - registry.sighup.io/fury/memcached
 
@@ -288,5 +289,6 @@ images:
     tag:
       - "v0.14.2"
       - "v0.14.4"
+      - "v0.15.3"
     destinations:
       - registry.sighup.io/fury/prom/memcached-exporter
