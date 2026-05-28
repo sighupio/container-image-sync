@@ -79,6 +79,7 @@ images:
       #- "1.15.0"
       - "1.19.2"
       - "1.22.2"
+      - "2.7.3"
     destinations:
       - registry.sighup.io/fury/kiwigrid/k8s-sidecar
 
