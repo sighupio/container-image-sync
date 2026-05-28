@@ -313,6 +313,7 @@ images:
       - "v0.18.1"
       - "v0.19.1"
       - "v0.21.0"
+      - "v0.22.0"
     destinations:
       - registry.sighup.io/fury/brancz/kube-rbac-proxy
 
