@@ -246,7 +246,7 @@ images:
     destinations:
       - registry.sighup.io/fury/kindest/local-path-provisioner
 
-  - name: Alpine 3.12
+  - name: Alpine 3
     source: docker.io/library/alpine
     multi-arch: true
     tag:
@@ -254,10 +254,11 @@ images:
       - "3.12"
       - "3.13"
       - "3.14"
+      - "3.24"
     destinations:
       - registry.sighup.io/fury/alpine
 
-  - name: Configmap reloader
+  - name: ConfigMap reloader
     source: docker.io/jimmidyson/configmap-reload
     tag:
       - "v0.3.0"
@@ -266,7 +267,7 @@ images:
     destinations:
       - registry.sighup.io/fury/jimmidyson/configmap-reload
 
-  - name: Configmap reloader
+  - name: ConfigMap reloader
     source: ghcr.io/jimmidyson/configmap-reload
     tag:
       - "v0.13.1"
