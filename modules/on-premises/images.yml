@@ -212,4 +212,4 @@ images:
     tag:
       - "v1.0"
     destinations:
-      - registry.sighup.io/fury/kubelet-csr-approver
+      - registry.sighup.io/fury/on-premises/kubelet-csr-approver
