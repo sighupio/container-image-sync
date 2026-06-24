@@ -1,4 +1,4 @@
-ARG ALPINE=3.20
+ARG ALPINE=3.23.5
 FROM alpine:${ALPINE}
 
 RUN apk add --no-cache bash curl jq openssl kubectl sed

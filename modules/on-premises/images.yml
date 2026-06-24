@@ -208,8 +208,8 @@ images:
       context: custom/kubelet-csr-approver
       args:
         - name: ALPINE
-          value: "3.20"
+          value: "3.23.5"
     tag:
       - "v1.0"
     destinations:
-      - registry.sighup.io/fury/kubelet-csr-approver
+      - registry.sighup.io/fury/on-premises/kubelet-csr-approver
