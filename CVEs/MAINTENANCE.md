@@ -76,3 +76,43 @@ By default the patching phase will not push the images on the registry. To push 
 2) Execute `make concat-multiple-kfd-images-list`
 2) Execute `make patch`
 3) Check the `PATCHED.md` file in each version directory
+
+## Copacetic helper image
+
+Copa uses a Debian helper image to download and inject updated packages into the target image filesystem. By default it pulls `ghcr.io/project-copacetic/copacetic/debian:stable-slim`.
+
+`Dockerfile.copacetic-helper` and `copacetic-source-policy.json` override that default with a custom image hosted at `registry.sighup.io/utilities/copacetic/debian`. This was necessary for two reasons:
+
+- when Debian 13 (Trixie) became stable, the `stable-slim` tag started pointing to Trixie repositories. The images we patch are still based on Debian 12 (Bookworm), so `apt-get download` failed with `Unable to locate package` for packages that no longer exist or have different names in Trixie.
+- `debian:12-slim` alone is missing `debconf`, `perl` and `libterm-readline-perl-perl`. Without them, `dpkg` fails when installing packages with post-install configuration scripts (e.g. `libc6`, `tzdata`) with `No config file found at /usr/share/perl5/Debconf/Config.pm`.
+
+### How to update the helper image
+
+The helper image must be rebuilt when the patching pipeline fails with `E: Unable to locate package <package>`. This happens when the packages installed in the target images have been renamed or updated in Debian (e.g. the `t64` transition from `libssl3` tp `libssl3t64`) but the pinned helper image predates those changes.
+
+Requirements:
+
+* `docker` with `buildx` support
+* push access to `registry.sighup.io/utilities/copacetic/`
+
+1) Log in to the registry: `docker login registry.sighup.io`
+2) Create a multi-arch builder if one does not exist yet: `docker buildx create --name multiarch --use --bootstrap`
+3) Build and push the updated image:
+
+```bash
+docker buildx build \
+  --platform linux/amd64,linux/arm64 \
+  --file CVEs/Dockerfile.copacetic-helper \
+  --push \
+  -t registry.sighup.io/utilities/copacetic/debian:latest \
+  CVEs/
+```
+
+4) Get the new digest: `docker buildx imagetools inspect registry.sighup.io/utilities/copacetic/debian:latest --format '{{json .Manifest.Digest}}'`
+5) Update both rules in `copacetic-source-policy.json` with the new digest:
+
+```json
+"identifier": "docker-image://registry.sighup.io/utilities/copacetic/debian@sha256:<new-digest>"
+```
+
+6) Commit and push

@@ -6,7 +6,7 @@
         "identifier": "docker-image://ghcr.io/project-copacetic/copacetic/debian:stable-slim"
       },
       "updates": {
-        "identifier": "docker-image://registry.sighup.io/utilities/copacetic/debian@sha256:beb2a0138e2cc1285fc3ef71d07b4a23893aac69a6b77d0ca7ab513530f20109"
+        "identifier": "docker-image://registry.sighup.io/utilities/copacetic/debian@sha256:e3f24207ef8f138e27c535c0b033d17625160bd99dfcd1ec31b31850e2cf469a"
       }
     },
     {
@@ -15,7 +15,7 @@
         "identifier": "docker-image://docker.io/library/debian:stable-slim"
       },
       "updates": {
-        "identifier": "docker-image://registry.sighup.io/utilities/copacetic/debian@sha256:beb2a0138e2cc1285fc3ef71d07b4a23893aac69a6b77d0ca7ab513530f20109"
+        "identifier": "docker-image://registry.sighup.io/utilities/copacetic/debian@sha256:e3f24207ef8f138e27c535c0b033d17625160bd99dfcd1ec31b31850e2cf469a"
       }
     }
   ]
