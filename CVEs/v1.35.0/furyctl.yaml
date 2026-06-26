@@ -1,0 +1,109 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/sighupio/distribution/v1.34.1/schemas/public/ekscluster-kfd-v1alpha2.json
+# Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+---
+apiVersion: kfd.sighup.io/v1alpha2
+kind: EKSCluster
+metadata:
+  name: sighup
+spec:
+  distributionVersion: feat/release-v1.35.0
+  toolsConfiguration:
+    opentofu:
+      state:
+        s3:
+          bucketName: sd-tfstate
+          keyPrefix: sd/
+          region: eu-west-1
+  region: eu-west-1
+  tags: {}
+  infrastructure:
+    vpc:
+      network:
+        cidr: 10.0.0.0/16
+        subnetsCidrs:
+          private:
+            - 10.0.182.0/24
+            - 10.0.172.0/24
+            - 10.0.162.0/24
+          public:
+            - 10.0.20.0/24
+            - 10.0.30.0/24
+            - 10.0.40.0/24
+    vpn:
+      instances: 1
+      port: 1194
+      instanceType: t3.micro
+      diskSize: 50
+      operatorName: sighup
+      dhParamsBits: 2048
+      vpnClientsSubnetCidr: 172.16.0.0/16
+      ssh:
+        publicKeys: []
+        githubUsersName: []
+        allowedFromCidrs:
+          - 0.0.0.0/0
+  kubernetes:
+    nodePoolsLaunchKind: launch_templates
+    nodeAllowedSshPublicKey: "{file://./id_rsa.pub}"
+    logRetentionDays: 1
+    apiServer:
+      privateAccess: true
+      publicAccess: true
+      privateAccessCidrs: []
+      publicAccessCidrs:
+        - 0.0.0.0/0
+    nodePools:
+      - name: workers
+        type: self-managed
+        size:
+          min: 1
+          max: 3
+        instance:
+          type: t3.large
+        labels:
+          nodepool: workers
+        taints: []
+        tags: {}
+  distribution:
+    common: {}
+    modules:
+      ingress:
+        baseDomain: internal.example.dev
+        nginx:
+          type: none
+        haproxy:
+          type: dual
+          tls:
+            provider: certManager
+        certManager:
+          clusterIssuer:
+            name: letsencrypt-fury
+            email: example@sighup.io
+            type: http01
+        dns:
+          public:
+            name: example.dev
+            create: false
+          private:
+            name: internal.example.dev
+            create: false
+      logging:
+        type: loki
+        minio:
+          storageSize: "20Gi"
+      monitoring:
+        type: prometheus
+      dr:
+        type: eks
+        velero:
+          eks:
+            region: eu-west-1
+            bucketName: sd-velero
+      policy:
+        type: none
+      auth:
+        provider:
+          type: none
