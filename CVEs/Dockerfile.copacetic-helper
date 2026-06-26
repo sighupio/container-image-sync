@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim
+FROM ghcr.io/project-copacetic/copacetic/debian:stable-slim
 RUN apt-get update \
     && apt-get install -y --no-install-recommends debconf perl libterm-readline-perl-perl \
     && rm -rf /var/lib/apt/lists/*
