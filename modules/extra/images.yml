@@ -289,6 +289,13 @@ images:
     destinations:
       - registry.sighup.io/fury/sig-storage/nfs-subdir-external-provisioner
 
+  - name: Kubectl JQ # https://github.com/sighupio/generic-container-images/blob/master/kubectl-jq/Dockerfile
+    source: quay.io/sighup/kubectl-jq
+    tag:
+      - "1.29.3"
+    destinations:
+      - registry.sighup.io/fury/kubectl-jq
+
   #- name: RabbitMQ (bitnami) ### DISABLED DUE TO BITNAMI BECOMING CLOSED SOURCE
   #  source: docker.io/bitnami/rabbitmq
   #  tag:
