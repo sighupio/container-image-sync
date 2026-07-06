@@ -289,12 +289,18 @@ images:
     destinations:
       - registry.sighup.io/fury/sig-storage/nfs-subdir-external-provisioner
 
-  - name: Kubectl JQ # https://github.com/sighupio/generic-container-images/blob/master/kubectl-jq/Dockerfile
-    source: quay.io/sighup/kubectl-jq
+  - name: Alpine-based image with curl and jq
+    source: curl-jq
+    multi-arch: true
+    build:
+      context: custom/curl-jq
+      args:
+        - name: ALPINE
+          value: "3.24.1"
     tag:
-      - "1.29.3"
+      - "3.24.1"
     destinations:
-      - registry.sighup.io/fury/kubectl-jq
+      - registry.sighup.io/fury/curl-jq
 
   #- name: RabbitMQ (bitnami) ### DISABLED DUE TO BITNAMI BECOMING CLOSED SOURCE
   #  source: docker.io/bitnami/rabbitmq
