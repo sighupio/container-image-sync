@@ -210,6 +210,7 @@ function patch_image() {
            [ "${copa_error}" == "no patchable packages found" ] ||
            [ "${copa_error}" == "no scanning results for os-pkgs found" ] ||
            [[ "${copa_error}" =~ "error occurred:" ]] ||
+           [[ "${copa_error}" =~ "errors occurred:" ]] ||
            [[ "${copa_error}" =~ "unsupported osType" ]]
         )
         then
