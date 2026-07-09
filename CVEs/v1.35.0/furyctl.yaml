@@ -9,7 +9,7 @@ kind: EKSCluster
 metadata:
   name: sighup
 spec:
-  distributionVersion: feat/release-v1.35.0
+  distributionVersion: v1.35.0
   toolsConfiguration:
     opentofu:
       state:
