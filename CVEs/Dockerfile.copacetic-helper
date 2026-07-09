@@ -2,3 +2,12 @@ FROM ghcr.io/project-copacetic/copacetic/debian:stable-slim
 RUN apt-get update \
     && apt-get install -y --no-install-recommends debconf perl libterm-readline-perl-perl \
     && rm -rf /var/lib/apt/lists/*
+# Copa uses the helper's apt to download packages for the target image. The target may be based
+# on an older Debian release than the helper, so we add its sources here. Copa calls
+# `apt-get download pkg=version` with the exact version from Trivy, so packages from different
+# releases are unambiguous even when both are configured. Add a new block here when a future
+# SD version introduces a new Debian release.
+RUN printf 'deb http://deb.debian.org/debian bookworm main\ndeb http://security.debian.org/debian-security bookworm-security main\n' \
+    > /etc/apt/sources.list.d/bookworm.list \
+    && apt-get update \
+    && rm -rf /var/lib/apt/lists/*
