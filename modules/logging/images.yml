@@ -310,5 +310,6 @@ images:
     source: ghcr.io/jkroepke/access-log-exporter
     tag:
       - "0.4.0"
+      - "0.4.13"
     destinations:
       - registry.sighup.io/fury/jkroepke/access-log-exporter
