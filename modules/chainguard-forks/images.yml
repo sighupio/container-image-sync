@@ -19,6 +19,34 @@
 # tag, and BASE_IMAGE can be paired across multiple versions in one entry.
 
 images:
+  - name: MinIO 20260520 [Chainguard fork]
+    source: minio-chainguard-fork-20260520
+    multi-arch: true
+    build:
+      git_source:
+        repo: https://github.com/chainguard-forks/minio.git
+        ref: RELEASE.2026-05-20T23-44-52Z
+      dockerfile: Dockerfile.dev
+      context: .
+    tag:
+      - "RELEASE.2026-05-20T23-44-52Z-chainguard"
+    destinations:
+      - registry.sighup.io/fury/minio
+
+  - name: MinIO 20260717 [Chainguard fork]
+    source: minio-chainguard-fork-20260717
+    multi-arch: true
+    build:
+      git_source:
+        repo: https://github.com/chainguard-forks/minio.git
+        ref: RELEASE.2026-07-17T12-07-51Z
+      dockerfile: Dockerfile.dev
+      context: .
+    tag:
+      - "RELEASE.2026-07-17T12-07-51Z-chainguard"
+    destinations:
+      - registry.sighup.io/fury/minio
+
   - name: nginx base image [Chainguard fork]
     source: ingress-nginx-chainguard-nginx
     multi-arch: true
@@ -66,17 +94,3 @@ images:
       - "v1.15.5-chainguard"
     destinations:
       - registry.sighup.io/fury/ingress-nginx/controller
-
-  - name: MinIO 20260520 [Chainguard fork]
-    source: minio-chainguard-fork-20260520
-    multi-arch: true
-    build:
-      git_source:
-        repo: https://github.com/chainguard-forks/minio.git
-        ref: RELEASE.2026-05-20T23-44-52Z
-      dockerfile: Dockerfile.dev
-      context: .
-    tag:
-      - "RELEASE.2026-05-20T23-44-52Z-chainguard"
-    destinations:
-      - registry.sighup.io/fury/minio
