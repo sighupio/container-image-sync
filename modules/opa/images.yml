@@ -25,6 +25,7 @@ images:
       - "v3.20.1"
       - "v3.21.0"
       - "v3.22.2"
+      - "v3.23.1"
     destinations:
       - registry.sighup.io/fury/openpolicyagent/gatekeeper
 
@@ -59,6 +60,7 @@ images:
       - "v1.15.1"
       - "v1.16.0"
       - "v1.18.1"
+      - "v1.19.1"
     destinations:
       - registry.sighup.io/fury/kyverno/kyverno
       
@@ -68,6 +70,7 @@ images:
       - "v1.15.1"
       - "v1.16.0"
       - "v1.18.1"
+      - "v1.19.1"
     destinations:
       - registry.sighup.io/fury/kyverno/kyvernopre
 
@@ -77,6 +80,7 @@ images:
       - "v1.15.1"
       - "v1.16.0"
       - "v1.18.1"
+      - "v1.19.1"
     destinations:
       - registry.sighup.io/fury/kyverno/background-controller
 
@@ -86,6 +90,7 @@ images:
       - "v1.15.1"
       - "v1.16.0"
       - "v1.18.1"
+      - "v1.19.1"
     destinations:
       - registry.sighup.io/fury/kyverno/cleanup-controller
 
@@ -95,6 +100,7 @@ images:
       - "v1.15.1"
       - "v1.16.0"
       - "v1.18.1"
+      - "v1.19.1"
     destinations:
       - registry.sighup.io/fury/kyverno/reports-controller
 
