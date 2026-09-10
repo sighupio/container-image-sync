@@ -40,6 +40,7 @@ images:
       - "v0.27.0"
       - "v0.28.1"
       - "v0.31.1"
+      - "v0.33.0"
     destinations:
       - registry.sighup.io/fury/prometheus/alertmanager
 
@@ -80,6 +81,7 @@ images:
       - "1.19.2"
       - "1.22.2"
       - "2.7.3"
+      - "2.11.2"
     destinations:
       - registry.sighup.io/fury/kiwigrid/k8s-sidecar
 
@@ -103,6 +105,7 @@ images:
       - "11.3.0"
       - "12.1.0"
       - "12.4.1"
+      - "13.0.2"
     destinations:
       - registry.sighup.io/fury/grafana/grafana
 
@@ -136,6 +139,7 @@ images:
       - "v2.13.0"
       - "v2.16.0"
       - "v2.18.0"
+      - "v2.19.0"
     destinations:
       - registry.sighup.io/fury/kube-state-metrics/kube-state-metrics
 
@@ -166,6 +170,7 @@ images:
       - "v2.54.1"
       - "v3.5.0"
       - "v3.10.0"
+      - "v3.12.0"
     destinations:
       - registry.sighup.io/fury/prometheus
       - registry.sighup.io/fury/prometheus/prometheus
@@ -221,6 +226,7 @@ images:
       - "v0.76.2"
       - "v0.85.0"
       - "v0.89.0"
+      - "v0.92.0"
     destinations:
       - registry.sighup.io/fury/prometheus-operator/prometheus-config-reloader
 
@@ -269,6 +275,7 @@ images:
       - "3.18.1"
       - "3.19.1"
       - "4.1.0"
+      - "4.2.0"
     destinations:
       - registry.sighup.io/fury/enix/x509-certificate-exporter
 
@@ -290,6 +297,7 @@ images:
       - "2.15.0"
       - "2.17.0"
       - "3.0.4"
+      - "3.2.0"
     destinations:
       - registry.sighup.io/fury/grafana/mimir
 
@@ -333,5 +341,6 @@ images:
       - "v1.8.2"
       - "v1.9.1"
       - "v1.10.2"
+      - "v1.11.1"
     destinations:
       - registry.sighup.io/fury/prometheus/node-exporter
