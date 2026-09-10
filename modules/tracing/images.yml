@@ -8,6 +8,7 @@ images:
       - "2.7.1"
       - "2.8.2"
       - "2.10.5"
+      - "2.10.8"
     destinations:
       - registry.sighup.io/fury/grafana/tempo
 
@@ -17,6 +18,7 @@ images:
       - "1.5.17-alpine"
       - "1.6.37-alpine"
       - "1.6.42-alpine"
+      - "1.6.43-alpine"
     destinations:
       - registry.sighup.io/fury/memcached
 
