@@ -29,7 +29,7 @@ USER grafana
 ENV GF_PLUGIN_RENDERING_CHROME_BIN="/usr/bin/chromium-browser"
 
 RUN if [ $GF_INSTALL_IMAGE_RENDERER_PLUGIN = "true" ]; then \
-    grafana-cli \
+    grafana cli \
         --pluginsDir "$GF_PATHS_PLUGINS" \
         --pluginUrl https://github.com/grafana/grafana-image-renderer/releases/latest/download/plugin-linux-x64-glibc-no-chromium.zip \
         plugins install grafana-image-renderer; \
@@ -45,9 +45,9 @@ RUN if [ ! -z "${GF_INSTALL_PLUGINS}" ]; then \
         if expr match "$plugin" '.*\;.*'; then \
             pluginUrl=$(echo "$plugin" | cut -d';' -f 1); \
             pluginInstallFolder=$(echo "$plugin" | cut -d';' -f 2); \
-            grafana-cli --pluginUrl ${pluginUrl} --pluginsDir "${GF_PATHS_PLUGINS}" plugins install "${pluginInstallFolder}"; \
+            grafana cli --pluginUrl ${pluginUrl} --pluginsDir "${GF_PATHS_PLUGINS}" plugins install "${pluginInstallFolder}"; \
         else \
-            grafana-cli --pluginsDir "${GF_PATHS_PLUGINS}" plugins install ${plugin}; \
+            grafana cli --pluginsDir "${GF_PATHS_PLUGINS}" plugins install ${plugin}; \
         fi \
     done \
 fi
