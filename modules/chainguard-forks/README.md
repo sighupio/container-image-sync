@@ -63,8 +63,8 @@ inconsistent with its git tags).
 
 1. Look up the latest `controller-v*` tag in the fork and read
    `images/nginx/TAG` at that tag to get the matching nginx version.
-2. Update [`images.yml`](images.yml):
-   - Both entries: `build.git_source.ref` → the new fork tag.
+2. Append a new nginx/controller pair to [`images.yml`](images.yml):
+   - Both new entries: `build.git_source.ref` → the new fork tag.
    - nginx entry: `tag` value → `<NEW_NGINX_VERSION>-chainguard`.
    - controller entry:
      - `build.pre_build_commands` → both lines updated to
