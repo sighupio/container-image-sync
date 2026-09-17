@@ -117,7 +117,7 @@ images:
   - registry.sighup.io/fury/groundnuty/k8s-wait-for
 
 - name: Minio [Fury Kubernetes DR]
-  source: docker.io/minio/minio
+  source: quay.io/minio/minio
   tag:
   #- "RELEASE.2020-01-25T02-50-51Z"
   #- "RELEASE.2020-09-17T04-49-20Z"
@@ -136,7 +136,7 @@ images:
   - registry.sighup.io/fury/minio
 
 - name: Minio MC [Fury Kubernetes DR]
-  source: docker.io/minio/mc
+  source: quay.io/minio/mc
   tag:
   #- "RELEASE.2020-01-25T03-02-19Z"
   #- "RELEASE.2020-09-03T00-08-28Z"

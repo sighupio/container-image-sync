@@ -272,7 +272,7 @@ images:
       - registry.sighup.io/fury/banzaicloud/config-reloader
 
   - name: Minio operator [Fury Kubernetes Logging]
-    source: docker.io/minio/operator
+    source: quay.io/minio/operator
     tag:
       - "v4.5.8"
     destinations:
