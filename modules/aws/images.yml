@@ -34,6 +34,7 @@ images:
       - "v1.33.0"
       - "v1.34.0"
       - "v1.35.0"
+      - "v1.36.1"
     destinations:
       - registry.sighup.io/fury/autoscaling/cluster-autoscaler
 
@@ -49,6 +50,7 @@ images:
       - "v2.13.4"
       - "v2.16.0"
       - "v3.4.0"
+      - "v3.5.0"
     destinations:
       - registry.sighup.io/fury/amazon/aws-alb-ingress-controller
 
