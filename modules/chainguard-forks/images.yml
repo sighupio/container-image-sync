@@ -26,6 +26,8 @@ images:
       git_source:
         repo: https://github.com/chainguard-forks/minio.git
         ref: RELEASE.2026-05-20T23-44-52Z
+      pre_build_commands:
+        - "sed -i.bak 's|minio/minio|quay.io/minio/minio|' Dockerfile.dev"
       dockerfile: Dockerfile.dev
       context: .
     tag:
@@ -40,6 +42,8 @@ images:
       git_source:
         repo: https://github.com/chainguard-forks/minio.git
         ref: RELEASE.2026-07-17T12-07-51Z
+      pre_build_commands:
+        - "sed -i.bak 's|minio/minio|quay.io/minio/minio|' Dockerfile.dev"
       dockerfile: Dockerfile.dev
       context: .
     tag:
