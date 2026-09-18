@@ -15,6 +15,7 @@ images:
       - "v1.40.3"
       - "v1.40.13"
       - "v1.42.0"
+      - "v1.42.6"
     destinations:
       - registry.sighup.io/fury/tigera/operator
 
@@ -44,6 +45,7 @@ images:
       - "v3.31.3"
       - "v3.31.6"
       - "v3.32.0"
+      - "v3.32.2"
     destinations:
       - registry.sighup.io/fury/calico/kube-controllers
 
@@ -74,6 +76,7 @@ images:
       - "v3.31.3"
       - "v3.31.6"
       - "v3.32.0"
+      - "v3.32.2"
     destinations:
       - registry.sighup.io/fury/calico/cni
 
@@ -104,6 +107,7 @@ images:
       - "v3.31.3"
       - "v3.31.6"
       - "v3.32.0"
+      - "v3.32.2"
     destinations:
       - registry.sighup.io/fury/calico/pod2daemon-flexvol
 
@@ -134,6 +138,7 @@ images:
       - "v3.31.3"
       - "v3.31.6"
       - "v3.32.0"
+      - "v3.32.2"
     destinations:
       - registry.sighup.io/fury/calico/node
 
@@ -153,6 +158,7 @@ images:
       - "v3.31.3"
       - "v3.31.6"
       - "v3.32.0"
+      - "v3.32.2"
     destinations:
       - registry.sighup.io/fury/calico/apiserver
 
@@ -172,6 +178,7 @@ images:
       - "v3.31.3"
       - "v3.31.6"
       - "v3.32.0"
+      - "v3.32.2"
     destinations:
       - registry.sighup.io/fury/calico/typha
 
@@ -192,6 +199,7 @@ images:
       - "v3.31.3"
       - "v3.31.6"
       - "v3.32.0"
+      - "v3.32.2"
     destinations:
       - registry.sighup.io/fury/calico/csi
 
@@ -212,6 +220,7 @@ images:
       - "v3.31.3"
       - "v3.31.6"
       - "v3.32.0"
+      - "v3.32.2"
     destinations:
       - registry.sighup.io/fury/calico/node-driver-registrar
 
@@ -224,6 +233,7 @@ images:
       - "v3.31.3"
       - "v3.31.6"
       - "v3.32.0"
+      - "v3.32.2"
     destinations:
       - registry.sighup.io/fury/calico/dikastes
 
@@ -236,6 +246,7 @@ images:
       - "v3.31.3"
       - "v3.31.6"
       - "v3.32.0"
+      - "v3.32.2"
     destinations:
       - registry.sighup.io/fury/calico/goldmane
       
@@ -248,6 +259,7 @@ images:
       - "v3.31.3"
       - "v3.31.6"
       - "v3.32.0"
+      - "v3.32.2"
     destinations:
       - registry.sighup.io/fury/calico/whisker
 
@@ -260,6 +272,7 @@ images:
       - "v3.31.3"
       - "v3.31.6"
       - "v3.32.0"
+      - "v3.32.2"
     destinations:
       - registry.sighup.io/fury/calico/whisker-backend
 
