@@ -76,9 +76,12 @@ images:
       - "v1.34.4"
       - "v1.34.8"
       - "v1.34.11"
+      - "v1.34.12"
       - "v1.35.5"
       - "v1.35.8"
+      - "v1.35.9"
       - "v1.36.4"
+      - "v1.36.5"
     destinations:
       - registry.sighup.io/fury/on-premises/kube-apiserver
 
@@ -119,9 +122,12 @@ images:
       - "v1.34.4"
       - "v1.34.8"
       - "v1.34.11"
+      - "v1.34.12"
       - "v1.35.5"
       - "v1.35.8"
+      - "v1.35.9"
       - "v1.36.4"
+      - "v1.36.5"
     destinations:
       - registry.sighup.io/fury/on-premises/kube-controller-manager
 
@@ -162,9 +168,12 @@ images:
       - "v1.34.4"
       - "v1.34.8"
       - "v1.34.11"
+      - "v1.34.12"
       - "v1.35.5"
       - "v1.35.8"
+      - "v1.35.9"
       - "v1.36.4"
+      - "v1.36.5"
     destinations:
       - registry.sighup.io/fury/on-premises/kube-proxy
 
@@ -205,12 +214,15 @@ images:
       - "v1.34.4"
       - "v1.34.8"
       - "v1.34.11"
+      - "v1.34.12"
       - "v1.35.5"
       - "v1.35.8"
+      - "v1.35.9"
       - "v1.36.4"
+      - "v1.36.5"
     destinations:
       - registry.sighup.io/fury/on-premises/kube-scheduler
-  
+
   - name: HAProxy [Fury Kubernetes On-Premises]
     source: docker.io/library/haproxy
     multi-arch: true
