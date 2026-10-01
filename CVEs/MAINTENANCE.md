@@ -21,6 +21,8 @@ The [workflow](.github/workflows/cve-scan-and-patching.yml) is triggered at ever
 > The command creates a new folder named with the version of SKD and a new `furyctl.yaml` file with cluster name `sighup`, the same distribution version, and kind `KFDDistribution` (everything can be disabled in the furyctl.yaml file, we only need to download the dependencies).  
 2) Commit and push the new folder
 
+> Some modules are downloaded by furyctl only for some cluster kinds (e.g. `aws` only for `EKSCluster`, `utilities` only for `OnPremises` and `Immutable`). To scan all of them, put one subfolder per kind inside the version folder, each with its own `furyctl.yaml` (e.g. `v1.36.0/ekscluster/furyctl.yaml` and `v1.36.0/onpremises/furyctl.yaml`): the dependencies of every kind are downloaded and built into a single `images.txt` and a single report for the version.
+
 ### What the workflow does
 
 The workflow performs the following tasks: 
