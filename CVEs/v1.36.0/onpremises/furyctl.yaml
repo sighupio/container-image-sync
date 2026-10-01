@@ -11,7 +11,7 @@ metadata:
   name: sighup
 spec:
   # Defines which KFD version will be installed and, in consequence, the Kubernetes version used to create the cluster. It supports git tags and branches. Example: v1.29.4.
-  distributionVersion: v1.36.0-rc.0
+  distributionVersion: feat/release-v1.36.0
   # Defines the Kubernetes components configuration and the values needed for the `kubernetes` phase of furyctl.
   kubernetes:
     # The path to the folder where the PKI files for Kubernetes and etcd are stored.
