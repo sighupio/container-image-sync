@@ -278,6 +278,25 @@ images:
     destinations:
       - registry.sighup.io/fury/jimmidyson/configmap-reload
 
+  # Upstream v0.15.0 is based on distroless debian11, whose security packages are
+  # no longer available, so it can't be patched. Rebuilt from the same source
+  # (same Go toolchain) changing only the base image to distroless debian12.
+  - name: ConfigMap reloader v0.15.0 [rebuilt on distroless debian12]
+    source: configmap-reload-v0.15.0-debian12
+    multi-arch: true
+    build:
+      git_source:
+        repo: https://github.com/jimmidyson/configmap-reload.git
+        ref: v0.15.0
+      context: .
+      args:
+        - name: BASEIMAGE
+          value: "gcr.io/distroless/static-debian12:nonroot"
+    tag:
+      - "v0.15.0-debian12"
+    destinations:
+      - registry.sighup.io/fury/jimmidyson/configmap-reload
+
   - name: Pluto api deprecation
     source: us-docker.pkg.dev/fairwinds-ops/oss/pluto
     tag:
