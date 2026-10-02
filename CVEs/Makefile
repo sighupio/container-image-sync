@@ -44,20 +44,28 @@ scan-post-patch:
 	done; \
 	wait
 
+# a version folder holds either a single furyctl.yaml or one subfolder per cluster kind
+# (e.g. v1.36.0/ekscluster, v1.36.0/onpremises), since some modules are downloaded only for some kinds
+FURYCTL_CONFIG_DIRS = `if [ -e $(KFD_VERSION)/furyctl.yaml ]; then echo $(KFD_VERSION); else for config in $(KFD_VERSION)/*/furyctl.yaml; do dirname $$config; done; fi`
+
 download-deps:
-	furyctl -c $(KFD_VERSION)/furyctl.yaml -o $(KFD_VERSION) download dependencies
+	for config_dir in $(FURYCTL_CONFIG_DIRS); do \
+		furyctl -c $$config_dir/furyctl.yaml -o $$config_dir download dependencies || exit 1; \
+	done
 
 kustomize-build-all:
 	# to remove KFD unused cluster-autoscaler images
 	KFD_VERSION=$(KFD_VERSION)
 	echo "" > $(KFD_VERSION)/built.yaml
-	for kustomize in `find $(KFD_VERSION)/.furyctl/sighup/vendor/modules \
-		-not -path "*/cluster-autoscaler/base/*" \
-		-not -path "*/tests/*" \
-		-not -path "*/examples/*" \
-		-name "kustomization.y*ml" \
-		\( -path "*/cluster-autoscaler/$$(echo $${KFD_VERSION} | cut -d'.' -f1,2)*/*" -or -not -path "*/cluster-autoscaler/*" \)`; do \
-			`find $(KFD_VERSION)/.furyctl/bin -name kustomize -type f` build `dirname $$kustomize` >> $(KFD_VERSION)/built.yaml; \
+	for config_dir in $(FURYCTL_CONFIG_DIRS); do \
+		for kustomize in `find $$config_dir/.furyctl/sighup/vendor/modules \
+			-not -path "*/cluster-autoscaler/base/*" \
+			-not -path "*/tests/*" \
+			-not -path "*/examples/*" \
+			-name "kustomization.y*ml" \
+			\( -path "*/cluster-autoscaler/$$(echo $${KFD_VERSION} | cut -d'.' -f1,2)*/*" -or -not -path "*/cluster-autoscaler/*" \)`; do \
+				`find $$config_dir/.furyctl/bin -name kustomize -type f` build `dirname $$kustomize` >> $(KFD_VERSION)/built.yaml; \
+		done; \
 	done
 
 generate-image-list-from-manifests:
