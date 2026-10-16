@@ -120,43 +120,6 @@ images:
   destinations:
   - registry.sighup.io/fury/groundnuty/k8s-wait-for
 
-- name: Minio [Fury Kubernetes DR]
-  source: quay.io/minio/minio
-  tag:
-  #- "RELEASE.2020-01-25T02-50-51Z"
-  #- "RELEASE.2020-09-17T04-49-20Z"
-  #- "RELEASE.2021-05-26T00-22-46Z"
-  #- "RELEASE.2022-10-24T18-35-07Z"
-  #- "RELEASE.2023-01-12T02-06-16Z"
-  #- "RELEASE.2023-01-31T02-24-19Z"
-  #- "RELEASE.2023-10-16T04-13-43Z"
-  - "RELEASE.2024-02-09T21-25-16Z"
-  - "RELEASE.2024-10-13T13-34-11Z"
-  - "RELEASE.2024-11-07T00-52-20Z"
-  - "RELEASE.2025-02-28T09-55-16Z"
-  - "RELEASE.2025-07-23T15-54-02Z"
-  - "RELEASE.2025-09-07T16-13-09Z"
-  destinations:
-  - registry.sighup.io/fury/minio
-
-- name: Minio MC [Fury Kubernetes DR]
-  source: quay.io/minio/mc
-  tag:
-  #- "RELEASE.2020-01-25T03-02-19Z"
-  #- "RELEASE.2020-09-03T00-08-28Z"
-  #- "RELEASE.2021-05-18T03-39-44Z"
-  #- "RELEASE.2022-10-22T03-39-29Z"
-  #- "RELEASE.2023-01-28T20-29-38Z"
-  #- "RELEASE.2023-10-14T01-57-03Z"
-  - "RELEASE.2024-02-09T22-18-24Z"
-  - "RELEASE.2024-10-08T09-37-26Z"
-  - "RELEASE.2024-11-05T11-29-45Z"
-  - "RELEASE.2025-02-21T16-00-46Z"
-  - "RELEASE.2025-07-21T05-28-08Z"
-  - "RELEASE.2025-08-13T08-35-41Z"
-  destinations:
-  - registry.sighup.io/fury/minio/mc
-
 - name: Snapshot Controller [Fury Kubernetes DR]
   source: registry.k8s.io/sig-storage/snapshot-controller
   tag:
