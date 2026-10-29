@@ -77,6 +77,8 @@ function patched_image_problems() {
   fi
   grep '^os-release=' <<< "${original_packages}" | grep -v -q "^os-release=${debian_major}$" \
     && echo "/etc/os-release of the original image is not debian ${debian_major}"
-  comm -13 <(grep -v '^os-release=' <<< "${original_packages}") <(grep -v '^os-release=' <<< "${patched_packages}") \
-    | awk -F= -v release="deb${debian_major}" '{ if (match($2, /deb[0-9]+/) && substr($2, RSTART, RLENGTH) != release) printf "%s ", $0 }'
+  updated_packages=$(comm -13 <(grep -v '^os-release=' <<< "${original_packages}") <(grep -v '^os-release=' <<< "${patched_packages}"))
+  awk -F= -v release="deb${debian_major}" '{ if (match($2, /deb[0-9]+/) && substr($2, RSTART, RLENGTH) != release) printf "%s ", $0 }' <<< "${updated_packages}"
+  # logged on stderr, the problems are the output
+  info "checked $(grep -c . <<< "${updated_packages}") packages added or updated by the patch for debian ${debian_major} ($(grep '^os-release=' <<< "${original_packages}" || echo 'os-release=missing')): ${updated_packages//[$'\r\n']/ }" >&2
 }
