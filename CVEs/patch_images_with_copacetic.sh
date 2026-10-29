@@ -2,6 +2,7 @@
 
 source $(dirname $0)/utils.sh
 source $(dirname $0)/logging.sh
+source $(dirname $0)/copacetic_os.sh
 
 IMAGE_TO_PATCH=
 FILE_WITH_IMAGES_LIST_TO_PATCH=
@@ -41,13 +42,27 @@ DOCKERFILE_OUTPUT_DIR=.patching/dockerfile
 LOG_OUTPUT_DIR=.patching/log
 PATCH_ERROR_OUTPUT_FILE="${LOG_OUTPUT_DIR}/patch-error.log"
 
-SOURCE_POLICY_FILE="${SOURCE_POLICY_FILE:-$(dirname $0)/copacetic-source-policy.json}"
-if [ -f "${SOURCE_POLICY_FILE}" ]; then
-  export EXPERIMENTAL_BUILDKIT_SOURCE_POLICY="${SOURCE_POLICY_FILE}"
-  info "Using BuildKit source policy from ${SOURCE_POLICY_FILE}"
-else
-  warn "BuildKit source policy file ${SOURCE_POLICY_FILE} not found"
-fi
+# Copies the original image to the secured repository: the secured image works but is not patched
+function copy_original_image() {
+  if [ ${DRY_RUN:-1} -eq 0 ]
+  then
+    secured_image_with_digest=${image_to_patch_with_digest//${REGISTRY_BASE_URL}/${REGISTRY_SECURED_BASE_URL}}
+    info "copy ${image_to_patch_with_digest} to ${secured_image_with_digest}"
+    skopeo_run "skopeo copy \
+      --authfile=\$DOCKER_CONFIG/config.json \
+      docker://${image_to_patch_with_digest} \
+      docker://${secured_image_with_digest}"
+    MULTI_ARCH_IMAGES="${secured_image_with_digest} ${MULTI_ARCH_IMAGES}"
+    success "pushed ${secured_image_with_digest} with image id: ${image_to_patch_image_id}"
+  fi
+}
+
+# An image that can't be patched safely is copied unpatched and reported as an error
+function copy_unpatched_image() {
+  error "$1: ${image_to_patch} for linux/${ARCHITECTURE} will be copied unpatched"
+  PATCH_IMAGE_RETURN_ERROR=$((PATCH_IMAGE_RETURN_ERROR + 1))
+  copy_original_image
+}
 
 if [ -z "$(docker ps -f name=buildkitd -q 2> /dev/null)" ]
 then
@@ -101,7 +116,6 @@ function patch_image() {
     fi
     # Replace with skopeo/podman if exists a command that get imageId
     image_to_patch_image_id=$(docker inspect "${image_to_patch_with_digest}" --format '{{.Id}}')
-    docker rmi -f ${image_to_patch_with_digest} > /dev/null
     patched_tag="${image_to_patch_tag}-${ARCHITECTURE}-patched"
     # Handling image with no tag
     [ ${image_to_patch_tag} = ${image_to_patch} ] && patched_tag="latest-${ARCHITECTURE}-patched"
@@ -120,18 +134,45 @@ function patch_image() {
     then
       error "trivy failed to scan $image for linux/${ARCHITECTURE}"
       PATCH_IMAGE_RETURN_ERROR=$((PATCH_IMAGE_RETURN_ERROR + 1))
+      docker rmi -f "${image_to_patch_with_digest}" > /dev/null
       continue
     fi
     # info "Clean trivy scan cache"
     # trivy clean --scan-cache
+    if ! source_policy_file=$(source_policy_for "${TRIVY_SCAN_OUTPUT_FILE}")
+    then
+      copy_unpatched_image "${source_policy_file}"
+      docker rmi -f "${image_to_patch_with_digest}" > /dev/null
+      continue
+    fi
+    copa_env=()
+    if [ -n "${source_policy_file}" ]
+    then
+      info "Using BuildKit source policy ${source_policy_file}"
+      copa_env=(EXPERIMENTAL_BUILDKIT_SOURCE_POLICY="${source_policy_file}")
+    fi
     info "Patching CVEs in ${image_to_patch} for linux/${ARCHITECTURE}"
-    copa patch --timeout "15m" \
+    env "${copa_env[@]}" copa patch --timeout "15m" \
       -i "${image_to_patch_with_digest}" \
       -r "${TRIVY_SCAN_OUTPUT_FILE}" \
       --tag ${patched_tag} --format="openvex" \
       --output "$COPA_REPORT_OUTPUT_FILE" \
       -a tcp://127.0.0.1:8888 2>&1 | tee "${COPA_PATCHING_LOG_FILE}"
     copa_exit_code=${PIPESTATUS[0]}
+
+    if [ "${copa_exit_code}" -eq 0 ]
+    then
+      patch_problems=$(patched_image_problems "${TRIVY_SCAN_OUTPUT_FILE}" "${image_to_patch_with_digest}" "${image_to_patch_repo}:${patched_tag}")
+      if [ -n "${patch_problems}" ]
+      then
+        copy_unpatched_image "patched image is not valid (${patch_problems})"
+        buildctl --addr tcp://127.0.0.1:8888 prune
+        docker rmi -f "${image_to_patch_repo}:${patched_tag}"
+        docker rmi -f "${image_to_patch_with_digest}" > /dev/null
+        continue
+      fi
+    fi
+    docker rmi -f "${image_to_patch_with_digest}" > /dev/null
 
     if [ "${copa_exit_code}" -eq 0 ]
     then
@@ -204,8 +245,12 @@ function patch_image() {
       then
         copa_error="$(awk -F'Error: ' '$0 ~ /Error:/ {print $2}' ${COPA_PATCHING_LOG_FILE})"
         echo "linux/${ARCHITECTURE} ${secured_image}: ${copa_error}" >> "${PATCH_ERROR_OUTPUT_FILE}"
+        # an image requested by Copa and not redirected by the source policy
+        if grep -q 'denied by policy' "${COPA_PATCHING_LOG_FILE}"
+        then
+          copy_unpatched_image "copa requested an image denied by ${source_policy_file}"
         # Ignore accepted errors
-        if (
+        elif (
            [ "${copa_error}" == "no patchable vulnerabilities found" ] ||
            [ "${copa_error}" == "no patchable packages found" ] ||
            [ "${copa_error}" == "no scanning results for os-pkgs found" ] ||
@@ -215,17 +260,7 @@ function patch_image() {
         )
         then
           warn "${copa_error} in ${image_to_patch} for linux/${ARCHITECTURE}"
-          if [ ${DRY_RUN:-1} -eq 0 ]
-          then
-            secured_image_with_digest=${image_to_patch_with_digest//${REGISTRY_BASE_URL}/${REGISTRY_SECURED_BASE_URL}}
-            info "copy ${image_to_patch_with_digest} to ${secured_image_with_digest}"
-            skopeo_run "skopeo copy \
-              --authfile=\$DOCKER_CONFIG/config.json \
-              docker://${image_to_patch_with_digest} \
-              docker://${secured_image_with_digest}"
-            MULTI_ARCH_IMAGES="${image_to_patch_with_digest//${REGISTRY_BASE_URL}/${REGISTRY_SECURED_BASE_URL}} ${MULTI_ARCH_IMAGES}"
-            success "pushed ${secured_image_with_digest} with image id: ${image_to_patch_image_id}"
-          fi
+          copy_original_image
         else
           error "patching ${image_to_patch} for linux/${ARCHITECTURE}: ${copa_error}"
           PATCH_IMAGE_RETURN_ERROR=$((PATCH_IMAGE_RETURN_ERROR + 1))

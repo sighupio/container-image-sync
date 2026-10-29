@@ -5,7 +5,8 @@
 	generate-image-list-from-manifests \
 	trivy-download-db \
 	scan-vulns \
-	concat-multiple-kfd-images-list
+	concat-multiple-kfd-images-list \
+	check-copacetic-helpers
 
 KFD_VERSIONS := $(shell find . -maxdepth 1 -mindepth 1 -type d -name "v*"  | cut -d/ -f2 | sort )
 DRY_RUN := 1
@@ -31,6 +32,9 @@ concat-multiple-kfd-images-list:
 	done
 	sort --unique "$(PATCH_FILE_IMAGE_LIST_TO_PATCHING).tmp" --output $(PATCH_FILE_IMAGE_LIST_TO_PATCHING)
 	rm $(PATCH_FILE_IMAGE_LIST_TO_PATCHING).tmp
+
+check-copacetic-helpers:
+	./check_copacetic_helpers.sh
 
 patch:
 	DRY_RUN=$(DRY_RUN) TRIVY_CACHE_DIR=$(TRIVY_CACHE_DIR) ./patch_images_with_copacetic.sh -i "$(IMAGE_TO_PATCH)" -l "$(PATCH_FILE_IMAGE_LIST_TO_PATCHING)" -o "$(PATCH_REPORT_OUTPUT_FILE)"
