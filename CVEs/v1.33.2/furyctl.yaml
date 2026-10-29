@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/sighupio/distribution/v1.34.3/schemas/public/kfddistribution-kfd-v1alpha2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/sighupio/distribution/v1.33.2/schemas/public/kfddistribution-kfd-v1alpha2.json
 # Copyright (c) 2017-present SIGHUP s.r.l All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
@@ -18,7 +18,7 @@ metadata:
 spec:
   # This value defines which KFD version will be installed and in consequence the Kubernetes version to use to create the cluster,
   # it supports git tags and branches
-  distributionVersion: v1.34.3
+  distributionVersion: v1.33.2
   # This section describes how the KFD distribution will be installed
   distribution:
     # This common configuration will be applied to all the packages that will be installed in the cluster
@@ -57,13 +57,6 @@ spec:
               # key: "{file://relative/path/to/ssl.key}"
               # the ca file, a file notation can be used to get the content from a file
               # ca: "{file://relative/path/to/ssl.ca}"
-        haproxy:
-          # type defines if the nginx should be configured as single or dual (internal + external) or none, with none no ingress controller will be deployed and also no ingress resource will be created
-          type: dual
-          # the tls section defines how the tls for the ingresses should be managed
-          tls:
-            # provider can be certManager, secret
-            provider: certManager
         # configuration for the cert-manager package
         certManager:
           # the configuration for the clusterIssuer that will be created
