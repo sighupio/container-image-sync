@@ -1,0 +1,54 @@
+{
+  "rules": [
+    {
+      "action": "CONVERT",
+      "selector": {
+        "identifier": "docker-image://docker.io/library/debian:stable-slim"
+      },
+      "updates": {
+        "identifier": "docker-image://registry.sighup.io/utilities/copacetic/debian@sha256:e057db6485f62d0054a5152eb21d5aa468a3fdb810bb4d7215a987c4980c842b"
+      }
+    },
+    {
+      "action": "CONVERT",
+      "selector": {
+        "identifier": "docker-image://docker.io/library/debian:13-slim"
+      },
+      "updates": {
+        "identifier": "docker-image://registry.sighup.io/utilities/copacetic/debian@sha256:e057db6485f62d0054a5152eb21d5aa468a3fdb810bb4d7215a987c4980c842b"
+      }
+    },
+    {
+      "action": "CONVERT",
+      "selector": {
+        "identifier": "docker-image://ghcr.io/project-copacetic/copacetic/debian:stable-slim"
+      },
+      "updates": {
+        "identifier": "docker-image://registry.sighup.io/utilities/copacetic/debian@sha256:e057db6485f62d0054a5152eb21d5aa468a3fdb810bb4d7215a987c4980c842b"
+      }
+    },
+    {
+      "action": "CONVERT",
+      "selector": {
+        "identifier": "docker-image://ghcr.io/project-copacetic/copacetic/debian:13-slim"
+      },
+      "updates": {
+        "identifier": "docker-image://registry.sighup.io/utilities/copacetic/debian@sha256:e057db6485f62d0054a5152eb21d5aa468a3fdb810bb4d7215a987c4980c842b"
+      }
+    },
+    {
+      "action": "DENY",
+      "selector": {
+        "identifier": "docker-image://docker.io/library/debian:*",
+        "match_type": "WILDCARD"
+      }
+    },
+    {
+      "action": "DENY",
+      "selector": {
+        "identifier": "docker-image://ghcr.io/project-copacetic/copacetic/debian:*",
+        "match_type": "WILDCARD"
+      }
+    }
+  ]
+}

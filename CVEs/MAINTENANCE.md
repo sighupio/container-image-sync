@@ -7,12 +7,14 @@ This guide explains how to generate a new report (in MarkDown) for a version of 
 * `trivy` command line installed
 * `jq` command line installed
 * `awk` command line installed
+* `furyctl` command line installed
+* `docker`, `copa` and `buildctl` command lines installed, to patch the images
 
 ## Run using GitHub Actions
 
-The [workflow](.github/workflows/cve-scan-and-patching.yml) is triggered at every change in the following files:
+The [workflow](../.github/workflows/cve-scan-and-patching.yml) is triggered every Sunday and at every change in the following files:
 - .github/workflows/cve-scan-and-patching.yml
-- CVEs/**
+- CVEs/** (except CVEs/MAINTENANCE.md)
 
 ### How to add new SKD version
 
@@ -33,6 +35,7 @@ The workflow performs the following tasks:
   - generate the list of images present in the manifests
   - scan the images with trivy
   - create the `FURY-CVEs.md` CVEs report  
+- check the Copacetic helper images
 - execute the patch of all the images used by all SKD versions
 - for each SKD version found, execute the "scan post patch" makefile target:
   - scan the patched images with trivy
@@ -46,11 +49,11 @@ The workflow performs the following tasks:
 #### Scan a new single SKD Version
 
 1) Create a new folder with the name of the version of SKD and create a new `furyctl.yaml` file with cluster name `sighup` and the same distribution version with kind KFDDistribution (everything can be disabled, we only need to download the dependencies): `furyctl create config --name sighup --version v1.X.Y --kind KFDDistribution --config v1.X.Y/furyctl.yaml`
-2) Execute `make download-deps SKD_VERSION=SOME_VALID_SKD_VERSION_WITH_A_FURYCTLYAML_INSIDE` 
-3) Execute `make kustomize-build-all SKD_VERSION=SOME_VALID_SKD_VERSION_WITH_A_FURYCTLYAML_INSIDE` 
+2) Execute `make download-deps KFD_VERSION=SOME_VALID_SKD_VERSION_WITH_A_FURYCTLYAML_INSIDE` 
+3) Execute `make kustomize-build-all KFD_VERSION=SOME_VALID_SKD_VERSION_WITH_A_FURYCTLYAML_INSIDE` 
 4) Execute `make trivy-download-db`
-5) Execute `make generate-image-list-from-manifests SKD_VERSION=SOME_VALID_SKD_VERSION_WITH_A_FURYCTLYAML_INSIDE`, this command will output an `SOME_VALID_SKD_VERSION_WITH_A_FURYCTLYAML_INSIDE/images.txt` file with all the images found in the build kustomize manifest. 
-6) Execute `make scan-vulns SKD_VERSION=SOME_VALID_SKD_VERSION_WITH_A_FURYCTLYAML_INSIDE`, this script will output a `SOME_VALID_SKD_VERSION_WITH_A_FURYCTLYAML_INSIDE/CVEs.md` file in the current directory with a table with all the CRITICAL CVEs 
+5) Execute `make generate-image-list-from-manifests KFD_VERSION=SOME_VALID_SKD_VERSION_WITH_A_FURYCTLYAML_INSIDE`, this command will output an `SOME_VALID_SKD_VERSION_WITH_A_FURYCTLYAML_INSIDE/images.txt` file with all the images found in the build kustomize manifest. 
+6) Execute `make scan-vulns KFD_VERSION=SOME_VALID_SKD_VERSION_WITH_A_FURYCTLYAML_INSIDE`, this script will output a `SOME_VALID_SKD_VERSION_WITH_A_FURYCTLYAML_INSIDE/CVEs.md` file with a table with all the CRITICAL CVEs 
 7) Check the `SOME_VALID_SKD_VERSION_WITH_A_FURYCTLYAML_INSIDE/CVEs.md`.
 
 #### Scan all defined SKD versions
@@ -67,9 +70,9 @@ By default the patching phase will not push the images on the registry. To push 
 
 1) Create a new folder with the name of the version of SKD and create a new `furyctl.yaml` file with cluster name `sighup` and the same distribution version with kind KFDDistribution (everything can be disabled, we only need to download the dependencies): `furyctl create config --name sighup --version v1.X.Y --kind KFDDistribution --config v1.X.Y/furyctl.yaml`
 2) Execute `make trivy-download-db`
-3) Execute `make scan-pre-patch FURY_VERSIONS=SOME_VALID_SKD_VERSION_WITH_A_FURYCTLYAML_INSIDE` 
+3) Execute `make scan-pre-patch KFD_VERSIONS=SOME_VALID_SKD_VERSION_WITH_A_FURYCTLYAML_INSIDE` 
 4) Execute `make patch PATCH_FILE_IMAGE_LIST_TO_PATCHING=SOME_VALID_SKD_VERSION_WITH_A_FURYCTLYAML_INSIDE/images.txt`
-5) Check the `SOME_VALID_SKD_VERSION_WITH_A_FURYCTLYAML_INSIDE/PATCHED.md`.
+5) Check the `PATCHED.md` file
 
 #### Scanning and patching all defined SKD versions
 
@@ -77,22 +80,18 @@ By default the patching phase will not push the images on the registry. To push 
 2) Execute `make scan-pre-patch`
 2) Execute `make concat-multiple-kfd-images-list`
 2) Execute `make patch`
-3) Check the `PATCHED.md` file in each version directory
+3) Check the `PATCHED.md` file
 
 ## Copacetic helper image
 
-Copa uses a Debian helper image to download and inject updated packages into the target image filesystem. By default it pulls `ghcr.io/project-copacetic/copacetic/debian:stable-slim`.
+To patch a Debian image without apt (e.g. distroless), Copa downloads the updated packages with `apt` in a separate Debian container, the helper image, and installs them into the image to patch. The BuildKit source policies `copacetic-source-policy.<release>.json` replace the default helper with `registry.sighup.io/utilities/copacetic/debian`, built from `Dockerfile.copacetic-helper`:
 
-`Dockerfile.copacetic-helper` and `copacetic-source-policy.json` override that default with a custom image hosted at `registry.sighup.io/utilities/copacetic/debian`. This was necessary for two reasons:
+- `copacetic-source-policy.bookworm.json` for Debian 12 (tag `12-debconf`)
+- `copacetic-source-policy.trixie.json` for Debian 13 (tag `13-debconf`)
 
-- `debian:stable-slim` alone is missing `debconf`, `perl` and `libterm-readline-perl-perl`. Without them, `dpkg` fails when installing packages with post-install configuration scripts (e.g. `libc6`, `tzdata`) with `No config file found at /usr/share/perl5/Debconf/Config.pm`.
-- Copa uses the helper's apt to download replacement packages (`apt-get download pkg=version`). The version is pinned exactly by Trivy's scan output, so the helper must have apt sources for all Debian releases in use. The `Dockerfile.copacetic-helper` includes both Bookworm and Trixie sources so that a single helper covers all supported SD versions.
+`copacetic_os.sh` chooses the policy from the Debian version detected by Trivy and, after the patch, checks that the updated packages belong to the same release; otherwise the original image is copied unpatched. The `check_copacetic_helpers` job checks the helpers before patching.
 
-### How to update the helper image
-
-The helper image must be rebuilt in two cases:
-- periodically to pull in security fixes for the helper base image itself
-- when the pipeline fails with `E: Unable to locate package <package>` because a new SD version targets a Debian release not yet in the helper's apt sources.
+### How to add the helper of a new Debian release
 
 Requirements:
 
@@ -101,23 +100,19 @@ Requirements:
 
 1) Log in to the registry: `docker login registry.sighup.io`
 2) Create a multi-arch builder if one does not exist yet: `docker buildx create --name multiarch --use --bootstrap`
-3) For a new Debian release: add its apt sources to `CVEs/Dockerfile.copacetic-helper` following the existing pattern for Bookworm
-4) Build and push the updated image:
+3) Build and push the helper of the new release:
 
 ```bash
 docker buildx build \
   --platform linux/amd64,linux/arm64 \
   --file CVEs/Dockerfile.copacetic-helper \
+  --build-arg DEBIAN_RELEASE=forky \
   --push \
-  -t registry.sighup.io/utilities/copacetic/debian:latest \
+  -t registry.sighup.io/utilities/copacetic/debian:14-debconf \
   CVEs/
 ```
 
-5) Get the new digest: `docker buildx imagetools inspect registry.sighup.io/utilities/copacetic/debian:latest --format '{{json .Manifest.Digest}}'`
-6) Update both rules in `CVEs/copacetic-source-policy.json` with the new digest:
-
-```json
-"identifier": "docker-image://registry.sighup.io/utilities/copacetic/debian@sha256:<new-digest>"
-```
-
+4) Get the new digest: `docker buildx imagetools inspect registry.sighup.io/utilities/copacetic/debian:14-debconf --format '{{json .Manifest.Digest}}'`
+5) Add `CVEs/copacetic-source-policy.forky.json`, copied from an existing policy with the `14-slim` selectors and the new digest, and the release in `source_policy_for` (`CVEs/copacetic_os.sh`)
+6) Run `make check-copacetic-helpers` in `CVEs/`
 7) Commit and push
