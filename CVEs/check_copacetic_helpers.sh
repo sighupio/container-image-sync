@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Checks the Copacetic helper images used by the source policies (copacetic-source-policy.<release>.json):
+# Checks the Copacetic helper images used by the source policies (copacetic-source-policy.<release>.json);
 # each helper must exist for amd64 and arm64 and be a Debian <release> image with the apt sources of
 # <release> only, otherwise Copa would patch the images with packages of another Debian release
 
@@ -33,7 +33,7 @@ do
       continue
     fi
     codename=$(sed -n 's/^codename=//p' <<< "${helper_info}")
-    # suites of the apt sources, both in deb822 (Suites: ...) and one-line (deb [options] url suite ...) format
+    # suites of the apt sources, both in deb822 format, from the Suites field, and in one-line format, from the third field of the deb lines
     suites=$(awk '/^Suites:/ { for (i = 2; i <= NF; i++) print $i }
       /^deb / { sub(/\[[^]]*\] /, ""); print $3 }' <<< "${helper_info}" | sort -u)
     foreign_suites=$(grep -v -E "^${release}(-updates|-security)?$" <<< "${suites}")

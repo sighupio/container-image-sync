@@ -4,12 +4,12 @@
 #
 # Copa patches distroless Debian images with the apt of a Debian tooling image, chosen by Copa itself
 # (debian:stable-slim for Debian 12+). The tooling image must be of the same Debian release of the image
-# to patch: Copa downloads the packages without a version and accepts any newer one, so with the apt
+# to patch, because Copa downloads the packages without a version and accepts any newer one; with the apt
 # sources of a newer release the patched image gets packages of that release and can break. The BuildKit
 # source policy of the image's release (copacetic-source-policy.<release>.json) redirects the tooling
 # image to our helper with the apt sources of that release only (see MAINTENANCE.md).
 #
-# Images of the other OSes are patched with their own package manager: nothing to do.
+# Images of the other OSes are patched with their own package manager, so there is nothing to do.
 
 COPACETIC_SOURCE_POLICY_DIR="${COPACETIC_SOURCE_POLICY_DIR:-$(dirname ${BASH_SOURCE[0]})}"
 
@@ -46,7 +46,7 @@ function debian_image_packages() {
     return 1
   fi
   docker cp "${container}:/var/lib/dpkg" "${dir}/dpkg" > /dev/null 2>&1
-  # /etc/os-release is usually a symlink to ../usr/lib/os-release: -L copies the file it points to
+  # /etc/os-release is usually a symlink to ../usr/lib/os-release, so -L copies the file it points to
   docker cp -L "${container}:/etc/os-release" "${dir}/os-release" > /dev/null 2>&1
   docker rm "${container}" > /dev/null
   cat "${dir}"/dpkg/status "${dir}"/dpkg/status.d/* 2> /dev/null \
@@ -56,7 +56,7 @@ function debian_image_packages() {
 }
 
 # Prints the problems of the patched image, compared with the original one of the trivy report (nothing
-# if it can be pushed): for Debian, an original /etc/os-release of another Debian version than the trivy
+# if it can be pushed); for Debian, an original /etc/os-release of another Debian version than the trivy
 # one used to choose the source policy (an independent check of the trivy detection), and the packages
 # added or updated by the patch that belong to another Debian release (debN in the version), whatever
 # tooling image Copa used
