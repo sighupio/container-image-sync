@@ -99,6 +99,23 @@ The tag we publish is the fork tag with a `-chainguard` suffix.
 `Dockerfile.dev` is self-contained (Go build stage + `wolfi-base` runtime with
 `docker-entrypoint.sh`, `bash` and `mc`), so no pre-build commands are needed.
 
+### Notes
+
+The runtime base is now `wolfi-base` instead of `minio/minio`. The entrypoint,
+`sh`, `bash` and `mc` are the same, with these differences:
+
+- `curl` is not available: use `busybox`, that is now included.
+- `MC_CONFIG_DIR` is not set: when the container runs as a non-root user
+  without a writable home, `mc` cannot save its config. Pass
+  `--config-dir /tmp/.mc` or set `MC_CONFIG_DIR=/tmp/.mc`.
+- The `MINIO_ROOT_USER_FILE`, `MINIO_ROOT_PASSWORD_FILE` and
+  `MINIO_CONFIG_ENV_FILE` variables are not set, so the credentials are not
+  read from files under `/run/secrets`: pass `MINIO_ROOT_USER` /
+  `MINIO_ROOT_PASSWORD` as environment variables.
+- `EXPOSE 9000` and `WORKDIR /` are not set: declare the ports in the Pod spec
+  and use absolute paths for data, certificates and keys. The working
+  directory defaults to `/`.
+
 ### Bump procedure
 
 1. Pick the latest `RELEASE.*` tag of the fork.
