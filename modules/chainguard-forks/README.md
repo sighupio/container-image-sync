@@ -95,14 +95,20 @@ inconsistent with its git tags).
 |-------|---------------------------|--------------------------------|
 | minio | `Dockerfile.dev` (root)   | `registry.sighup.io/fury/minio` |
 
-The tag we publish is the fork tag with a `-chainguard` suffix.
+The tag we publish is the fork tag with a `-chainguard-wolfi` suffix, for the
+images built on the `wolfi-base` runtime base (fork tags from
+`RELEASE.2026-09-21T00-15-41Z` onwards). The images with the `-chainguard` suffix
+(`RELEASE.2026-05-20T23-44-52Z-chainguard` and
+`RELEASE.2026-07-17T12-07-51Z-chainguard`) were built on the former
+`minio/minio` base and are no longer synced.
 `Dockerfile.dev` is self-contained (Go build stage + `wolfi-base` runtime with
 `docker-entrypoint.sh`, `bash` and `mc`), so no pre-build commands are needed.
 
 ### Notes
 
-The runtime base is now `wolfi-base` instead of `minio/minio`. The entrypoint,
-`sh`, `bash` and `mc` are the same, with these differences:
+The runtime base of the `-chainguard-wolfi` images is `wolfi-base` instead of
+`minio/minio`. The entrypoint, `sh`, `bash` and `mc` are the same, with these
+differences:
 
 - `curl` is not available: use `busybox`, that is now included.
 - `MC_CONFIG_DIR` is not set: when the container runs as a non-root user
@@ -120,7 +126,7 @@ The runtime base is now `wolfi-base` instead of `minio/minio`. The entrypoint,
 
 1. Pick the latest `RELEASE.*` tag of the fork.
 2. Append a new entry to [`images.yml`](images.yml) with `build.git_source.ref`
-   set to the new tag and `tag` set to `<NEW_TAG>-chainguard`.
+   set to the new tag and `tag` set to `<NEW_TAG>-chainguard-wolfi`.
 3. Open a PR. CI will build and push the image.
 
 

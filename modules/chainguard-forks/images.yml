@@ -124,9 +124,11 @@ images:
         ref: RELEASE.2026-11-16T00-11-40Z
       # Dockerfile.dev is self-contained since RELEASE.2026-09-21T00-15-41Z
       # (runtime base cgr.dev/chainguard/wolfi-base, no longer minio/minio).
+      # The -wolfi suffix tells these images apart from the older -chainguard
+      # ones, built on the minio/minio base.
       dockerfile: Dockerfile.dev
       context: .
     tag:
-      - "RELEASE.2026-11-16T00-11-40Z-chainguard"
+      - "RELEASE.2026-11-16T00-11-40Z-chainguard-wolfi"
     destinations:
       - registry.sighup.io/fury/minio
