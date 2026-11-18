@@ -82,4 +82,52 @@ inconsistent with its git tags).
 
 ---
 
+## minio
+
+- **Upstream**: `minio/minio` (archived; images removed from Docker Hub and Quay)
+- **Chainguard fork**: <https://github.com/chainguard-forks/minio>
+- **Rationale**: the upstream project is archived and no longer publishes
+  images; the fork backports CVE fixes and publishes a `RELEASE.*` tag for
+  each update.
+- **Sync config**: [`images.yml`](images.yml)
+
+| Image | Source in fork            | Push destination (path)        |
+|-------|---------------------------|--------------------------------|
+| minio | `Dockerfile.dev` (root)   | `registry.sighup.io/fury/minio` |
+
+The tag we publish is the fork tag with a `-chainguard-wolfi` suffix, for the
+images built on the `wolfi-base` runtime base (fork tags from
+`RELEASE.2026-09-21T00-15-41Z` onwards). The images with the `-chainguard` suffix
+(`RELEASE.2026-05-20T23-44-52Z-chainguard` and
+`RELEASE.2026-07-17T12-07-51Z-chainguard`) were built on the former
+`minio/minio` base and are no longer synced.
+`Dockerfile.dev` is self-contained (Go build stage + `wolfi-base` runtime with
+`docker-entrypoint.sh`, `bash` and `mc`), so no pre-build commands are needed.
+
+### Notes
+
+The runtime base of the `-chainguard-wolfi` images is `wolfi-base` instead of
+`minio/minio`. The entrypoint, `sh`, `bash` and `mc` are the same, with these
+differences:
+
+- `curl` is not available: use `busybox`, that is now included.
+- `MC_CONFIG_DIR` is not set: when the container runs as a non-root user
+  without a writable home, `mc` cannot save its config. Pass
+  `--config-dir /tmp/.mc` or set `MC_CONFIG_DIR=/tmp/.mc`.
+- The `MINIO_ROOT_USER_FILE`, `MINIO_ROOT_PASSWORD_FILE` and
+  `MINIO_CONFIG_ENV_FILE` variables are not set, so the credentials are not
+  read from files under `/run/secrets`: pass `MINIO_ROOT_USER` /
+  `MINIO_ROOT_PASSWORD` as environment variables.
+- `EXPOSE 9000` and `WORKDIR /` are not set: declare the ports in the Pod spec
+  and use absolute paths for data, certificates and keys. The working
+  directory defaults to `/`.
+
+### Bump procedure
+
+1. Pick the latest `RELEASE.*` tag of the fork.
+2. Append a new entry to [`images.yml`](images.yml) with `build.git_source.ref`
+   set to the new tag and `tag` set to `<NEW_TAG>-chainguard-wolfi`.
+3. Open a PR. CI will build and push the image.
+
+
 <!-- Append new forks below this line, using the same section template. -->
