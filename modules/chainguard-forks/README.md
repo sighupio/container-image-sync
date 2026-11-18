@@ -82,4 +82,29 @@ inconsistent with its git tags).
 
 ---
 
+## minio
+
+- **Upstream**: `minio/minio` (archived; images removed from Docker Hub and Quay)
+- **Chainguard fork**: <https://github.com/chainguard-forks/minio>
+- **Rationale**: the upstream project is archived and no longer publishes
+  images; the fork backports CVE fixes and publishes a `RELEASE.*` tag for
+  each update.
+- **Sync config**: [`images.yml`](images.yml)
+
+| Image | Source in fork            | Push destination (path)        |
+|-------|---------------------------|--------------------------------|
+| minio | `Dockerfile.dev` (root)   | `registry.sighup.io/fury/minio` |
+
+The tag we publish is the fork tag with a `-chainguard` suffix.
+`Dockerfile.dev` is self-contained (Go build stage + `wolfi-base` runtime with
+`docker-entrypoint.sh`, `bash` and `mc`), so no pre-build commands are needed.
+
+### Bump procedure
+
+1. Pick the latest `RELEASE.*` tag of the fork.
+2. Append a new entry to [`images.yml`](images.yml) with `build.git_source.ref`
+   set to the new tag and `tag` set to `<NEW_TAG>-chainguard`.
+3. Open a PR. CI will build and push the image.
+
+
 <!-- Append new forks below this line, using the same section template. -->

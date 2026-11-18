@@ -114,3 +114,19 @@ images:
       - "v1.15.10-chainguard"
     destinations:
       - registry.sighup.io/fury/ingress-nginx/controller
+
+  - name: MinIO RELEASE.2026-11-16T00-11-40Z [Chainguard fork]
+    source: minio-chainguard-fork-20261116
+    multi-arch: true
+    build:
+      git_source:
+        repo: https://github.com/chainguard-forks/minio.git
+        ref: RELEASE.2026-11-16T00-11-40Z
+      # Dockerfile.dev is self-contained since RELEASE.2026-09-21T00-15-41Z
+      # (runtime base cgr.dev/chainguard/wolfi-base, no longer minio/minio).
+      dockerfile: Dockerfile.dev
+      context: .
+    tag:
+      - "RELEASE.2026-11-16T00-11-40Z-chainguard"
+    destinations:
+      - registry.sighup.io/fury/minio
