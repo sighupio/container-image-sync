@@ -19,19 +19,20 @@
 # tag, and BASE_IMAGE can be paired across multiple versions in one entry.
 
 images:
-  - name: nginx base image v1.15.16 [Chainguard fork]
-    source: ingress-nginx-chainguard-nginx-v1.15.16
-    multi-arch: true
-    build:
-      git_source:
-        repo: https://github.com/chainguard-forks/ingress-nginx.git
-        ref: controller-v1.15.16
-      context: images/nginx/rootfs
-      # No build-args needed: the inner Dockerfile uses a fixed FROM alpine:3.23.3
-    tag:
-      - "v2.2.26-chainguard"
-    destinations:
-      - registry.sighup.io/fury/ingress-nginx/nginx
+  # TEMPORARILY COMMENTED TO SKIP THE LONG BUILD PHASE
+  # - name: nginx base image v1.15.16 [Chainguard fork]
+  #   source: ingress-nginx-chainguard-nginx-v1.15.16
+  #   multi-arch: true
+  #   build:
+  #     git_source:
+  #       repo: https://github.com/chainguard-forks/ingress-nginx.git
+  #       ref: controller-v1.15.16
+  #     context: images/nginx/rootfs
+  #     # No build-args needed: the inner Dockerfile uses a fixed FROM alpine:3.23.3
+  #   tag:
+  #     - "v2.2.26-chainguard"
+  #   destinations:
+  #     - registry.sighup.io/fury/ingress-nginx/nginx
 
   - name: nginx ingress controller v1.15.16 [Chainguard fork]
     source: ingress-nginx-chainguard-controller-v1.15.16
@@ -47,7 +48,7 @@ images:
       context: rootfs
       args:
         - name: BASE_IMAGE
-          value: "registry.sighup.io/fury/ingress-nginx/nginx:v2.2.13-chainguard"
+          value: "registry.sighup.io/fury/ingress-nginx/nginx:v2.2.26-chainguard"
         - name: VERSION
           value: "v1.15.16"
     tag:
